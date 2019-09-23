@@ -22,7 +22,7 @@
       <div class="mdc-drawer__content">
         <div class="mdc-list">
           <span class="mdc-list-title">Componentes</span>
-          <div class="mdc-list-container">
+          <div class="mdc-list-container comps">
             <a
               class="mdc-list-item"
               href="#"
@@ -37,7 +37,7 @@
           </div>
 
           <span class="mdc-list-title">Árvore de componentes</span>
-          <div class="mdc-list-container">
+          <div class="mdc-list-container comp-tree">
             <CompTree
               :element="elem"
               :elementSelected="elementSelected"
@@ -65,18 +65,13 @@
               </div>
             </div>
 
-            <!-- <div
-              class="device-look"
-              id="device-look"
-              :style="{'max-width': device }"
-              v-on:drop="dropComponent($event)"
-              v-on:dragover="allowDropComponent($event)"
-            >
+            <!--DeviceLook-->
+            <div id="device-look" class="device-look" :style="{'max-width': device }"
+              v-on:drop="dropComponent($event)" v-on:dragover="allowDropComponent($event)">
               <div class="device-root">Root</div>
-            </div> -->
 
-            <div class="device-look" :style="{'max-width': device }">
-              <iframe id="deviceFrame" width="100%" height="100%" frameborder="0"></iframe>
+              <iframe id="deviceFrame" width="100%" height="564" frameborder="0"
+                v-on:dragover="allowDropComponent($event)"></iframe>
             </div>
           </div>
 
@@ -219,26 +214,6 @@ export default class AppLayout extends Vue {
         iframe.contentWindow.document.head.appendChild(stylesElements[i].cloneNode(true));
       }
 
-      //devicelook
-      var divDeviceLook = document.createElement('div');
-      divDeviceLook.id = 'device-look';
-      divDeviceLook.className = 'device-look-frame';
-      divDeviceLook.style.width = '100%';
-      divDeviceLook.style.height = '100%';
-      divDeviceLook.addEventListener('drop', (event: any) => {
-        this.dropComponent(event);
-      });
-      divDeviceLook.addEventListener('dragover', (event: any) => {
-        this.allowDropComponent(event);
-      });
-
-      //device root
-      var divDeviceRoot = document.createElement('div');
-      divDeviceRoot.className = 'device-root';
-      divDeviceRoot.innerHTML = 'Root';
-
-      divDeviceLook.appendChild(divDeviceRoot);
-      iframe.contentWindow.document.body.appendChild(divDeviceLook);
       iframe.contentWindow.document.body.style.margin = '0px';
       iframe.contentWindow.document.body.style.display = 'block';
       iframe.contentWindow.document.body.style.backgroundColor = 'white';
@@ -263,7 +238,7 @@ export default class AppLayout extends Vue {
   getFrameDeviceLook(){
     const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
     if (!!iframe && !!iframe.contentWindow){
-      return iframe.contentWindow.document.getElementById('device-look');
+      return iframe.contentWindow.document.body;
     }
     return null;
   }
@@ -321,7 +296,7 @@ export default class AppLayout extends Vue {
     this.nameUniqueIndex++;
 
     instance.$el.setAttribute("data-compname", uniqueName);
-    instance.$el.className += " comp-active";
+    instance.$el.className += " wbcomp-active";
     instance.$el.style.cursor = "pointer";
 
     instance.$el.addEventListener("dragover", (event: any) => {
@@ -353,7 +328,7 @@ export default class AppLayout extends Vue {
    */
   changeProp(event: any){
     window.setTimeout(() => {
-      event.className+= ' comp-active';
+      event.className+= ' wbcomp-active';
     }, 100);
   }
 
@@ -384,9 +359,9 @@ export default class AppLayout extends Vue {
   removeCompActiveClass() {
     const iframeDoc = this.getIframeDocument();
     if (iframeDoc){
-      const activeElement = iframeDoc.querySelectorAll(".comp-active");
+      const activeElement = iframeDoc.querySelectorAll(".wbcomp-active");
       activeElement.forEach((elem) => {
-        elem.className = elem.className.replace(" comp-active", "");
+        elem.className = elem.className.replace(" wbcomp-active", "");
       });
     }
   }
@@ -410,7 +385,7 @@ export default class AppLayout extends Vue {
    */
   selectElement(elem: any) {
     this.removeCompActiveClass();
-    elem.className += " comp-active";
+    elem.className += " wbcomp-active";
 
     this.elementSelected = this.getSelectElementRecursive(elem);
   }
@@ -570,8 +545,17 @@ body {
     }
 
     .mdc-list-container {
-      max-height: 300px;
+      min-height: 200px;
       overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .comps{
+      max-height: 300px;
+    }
+
+    .comp-tree{
+      max-height: 330px;
 
       .active {
         color: $selected;
@@ -624,6 +608,15 @@ body {
             border: 1px solid rgba(0, 0, 0, 0.1);
             max-width: 1280px;
             height: 600px;
+
+              .device-root {
+                height: 50px;
+                padding: 16px;
+                box-sizing: border-box;
+                text-align: center;
+                text-transform: uppercase;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+              }
           }
 
         }
@@ -648,21 +641,11 @@ body {
   }
 }
 
-.device-look-frame{
-  .device-root {
-    height: 20px;
-    padding: 8px;
-    text-align: center;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.54);
-  }
+.wbuilder-insert {
+  display: none;
+}
 
-  .wbuilder-insert {
-    display: none;
-  }
-
-  .comp-active {
-    border: 1px solid $selected;
-  }
+.wbcomp-active {
+  border: 1px solid $selected;
 }
 </style>

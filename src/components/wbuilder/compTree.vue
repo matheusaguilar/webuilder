@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="display: inline-block">
         <div class="wb-item-device-elements"  v-on:drop="emitDrop"
             v-on:dragover="allowDropComponent($event)">
             <a :id="'item' + _uid" class="mdc-list-item" href="#" v-bind:class="{ active: element == elementSelected }"
@@ -73,10 +73,11 @@ export default class CompTree extends Vue {
 
     .mdc-list-item{
         font-size: 12px;
+        display: inline-block;
     }
 
     .material-icons{
-        margin-top: 10px;
+        margin-top: 2px;
         font-size: 20px;
         cursor: pointer;
     }
