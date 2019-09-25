@@ -3,7 +3,15 @@
     <div v-for="(prop, index) in propLabels" :key="index">
       <div class="wb-prop-elem">
         <label :for="'input' + index">{{prop}}:</label>
-        <input type="text" class="clean-slide" :id="'input' + index" :value="propValues[index]" @change="changeProps(index, $event)"/>
+
+        <h5 v-if="typeof propValues[index] === 'object'">
+          <select @change="changeProps(index, $event)">
+            <option v-for="(item, itemIndex) in propValues[index].options" :key="itemIndex">{{item}}</option>
+          </select>
+        </h5>
+
+        <input v-else type="text" class="clean-slide" :id="'input' + index" 
+          :value="propValues[index]" @change="changeProps(index, $event)"/>
       </div>
     </div>
   </div>
@@ -20,7 +28,11 @@ export default class CompProps extends Vue {
   propValues: any = [];
 
   changeProps(index: number, event: any){
-    this.component.instance[this.propLabels[index]] = event.target.value;
+    if (typeof this.propValues[index] === 'object'){ //Select
+      this.component.instance[this.propLabels[index]] = this.propValues[index].options.indexOf(event.target.value);
+    } else{ //Input
+      this.component.instance[this.propLabels[index]] = event.target.value;
+    }
     this.$emit('changeprop', this.component.element);
   }
 
@@ -32,7 +44,14 @@ export default class CompProps extends Vue {
       if (instance.$options.props){
         this.propLabels = Object.keys(instance.$options.props);
         for(var i=0; i<this.propLabels.length; i++){
-          this.propValues.push(instance[this.propLabels[i]]);
+          if (instance.$data[this.propLabels[i] + '__Options']){ //Select
+            this.propValues.push({
+              options: instance.$data[this.propLabels[i] + '__Options']
+            });
+          
+          } else{ //Input
+            this.propValues.push(instance[this.propLabels[i]]);
+          }
         }
       } else{
         this.propLabels = [];
@@ -55,6 +74,15 @@ export default class CompProps extends Vue {
     width: 170px;
     height: 24px;
     margin-top: 4px;
+
+    &:focus{
+      outline: none !important;
+    }
+  }
+
+  select{
+    width: 175px;
+    height: 24px;
 
     &:focus{
       outline: none !important;

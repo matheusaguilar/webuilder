@@ -1,11 +1,13 @@
 import LayoutGrid from '_Components/designSystem/layoutGrid.vue';
 import LayoutGridInner from '_Components/designSystem/layoutGridInner.vue';
 import LayoutGridCell from '_Components/designSystem/layoutGridCell.vue';
+import TopAppBar from '_Components/designSystem/TopAppBar.vue';
 
 const ComponentArray = [
     LayoutGrid,
     LayoutGridInner,
-    LayoutGridCell
+    LayoutGridCell,
+    TopAppBar
 ]
 
 export class ComponentRegister {

@@ -341,14 +341,18 @@ export default class AppLayout extends Vue {
     const comp = this.getComponentByName(name);
 
     if (comp) {
+
+      
       const instance = new comp.value();
       instance.$mount();
       this.elementSelected = this.createCompContainer(instance, name, comp);
 
       const elem = this.getSelectElementRecursive(obj.element);
       if (elem) {
-        this.insertHtmlWBuilder(elem.element, this.elementSelected.element);
-        elem.children.push(this.elementSelected);
+        const inserted = this.insertHtmlWBuilder(elem.element, this.elementSelected.element);
+        if (inserted){
+          elem.children.push(this.elementSelected);
+        }
       }
     }
   }
@@ -509,7 +513,9 @@ export default class AppLayout extends Vue {
     if (nodes.length > 0) {
       const parent = nodes[0].parentNode;
       parent.appendChild(insertElem);
+      return true;
     }
+    return false;
   }
 
 }

@@ -1,5 +1,5 @@
 <template>
-    <div :class="'teste ' + classes">
+    <div :class="classes">
         <div class="wbuilder-insert"></div>
     </div>
 </template>
@@ -41,8 +41,5 @@ export default {
 </script>
 
 <style lang="scss">
-.teste{
-    height: 100px;
-    background-color: blue;
-}
+
 </style>
