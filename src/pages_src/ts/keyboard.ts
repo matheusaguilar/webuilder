@@ -6,8 +6,10 @@ export class KeyBoardEvents{
     constructor(document: Document){
         this.document = document;
         this.document.body.addEventListener("keydown", (e: KeyboardEvent)  => {
-            if (this.keyCodefnList[e.keyCode.toString()]){
-                this.keyCodefnList[e.keyCode.toString()]();
+            if (e.keyCode){
+                if (this.keyCodefnList[e.keyCode.toString()]){
+                    this.keyCodefnList[e.keyCode.toString()]();
+                }
             }
         });
     }

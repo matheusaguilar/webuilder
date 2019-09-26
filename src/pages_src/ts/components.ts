@@ -1,13 +1,15 @@
-import LayoutGrid from '_Components/designSystem/layoutGrid.vue';
-import LayoutGridInner from '_Components/designSystem/layoutGridInner.vue';
-import LayoutGridCell from '_Components/designSystem/layoutGridCell.vue';
-import TopAppBar from '_Components/designSystem/TopAppBar.vue';
+import MDC_LayoutGrid from '_Components/wrapper/MDC_layoutGrid.vue';
+import MDC_LayoutGridInner from '_Components/wrapper/MDC_layoutGridInner.vue';
+import MDC_LayoutGridCell from '_Components/wrapper/MDC_layoutGridCell.vue';
+import MDC_TopAppBar from '_Components/wrapper/MDC_topAppBar.vue';
+import MDC_Drawer from '_Components/wrapper/MDC_drawer.vue';
 
 const ComponentArray = [
-    LayoutGrid,
-    LayoutGridInner,
-    LayoutGridCell,
-    TopAppBar
+    MDC_LayoutGrid,
+    MDC_LayoutGridInner,
+    MDC_LayoutGridCell,
+    MDC_TopAppBar,
+    MDC_Drawer
 ]
 
 export class ComponentRegister {

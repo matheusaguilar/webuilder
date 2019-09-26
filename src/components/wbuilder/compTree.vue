@@ -1,5 +1,5 @@
 <template>
-    <div style="display: inline-block">
+    <div style="display: inline-block; min-width: 220px">
         <div class="wb-item-device-elements"  v-on:drop="emitDrop"
             v-on:dragover="allowDropComponent($event)">
             <a :id="'item' + _uid" class="mdc-list-item" href="#" v-bind:class="{ active: element == elementSelected }"
