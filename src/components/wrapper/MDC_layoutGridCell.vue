@@ -1,45 +1,35 @@
 <template>
-    <div :class="classes">
-        <div class="wbuilder-insert"></div>
+  <MDClayoutGridCell :desktop="desktop" :tablet="tablet" :phone="phone">
+    <div class="wbuilder-insert"></div>
+    <h5>Ola Hahaha!</h5>
+    <div>
+      Hahaha <span style="color: red"> eita</span>
     </div>
+  </MDClayoutGridCell>
 </template>
 
 <script>
+import MDClayoutGridCell from "../designSystem/MDC_layoutGridCell";
+
+import { WrapperUtil } from "./../../pages_src/ts/wrapperUtil";
+
 export default {
-    props: {
-        desktop: {default: '12'},
-        tablet: {default: '8'},
-        phone: {default: '4'}
-    },
-    data: function(){
-        return{
-            classes: null
-        }
-    },
-    created(){
-        this.changeClass();
-    },
-    methods: {
-        changeClass(){
-            this.classes= `mdc-layout-grid__cell--span-${this.desktop}-desktop`
-            + ` mdc-layout-grid__cell--span-${this.tablet}-tablet`
-            + ` mdc-layout-grid__cell--span-${this.phone}-phone`;
-        }
-    },
-    watch: {
-        desktop: function (val) {
-            this.changeClass();
-        },
-        tablet: function (val) {
-            this.changeClass();
-        },
-        phone: function (val) {
-            this.changeClass();
-        }
+  components: {
+    MDClayoutGridCell
+  },
+  props: {
+    desktop: { default: "12" },
+    tablet: { default: "8" },
+    phone: { default: "4" }
+  },
+  methods: {
+    wbGetHTML(elem){
+      let htmlComp = `\n<MDClayoutGridCell desktop="${this.desktop}" tablet="${this.tablet}" phone="${this.phone}">`;
+      htmlComp += WrapperUtil.getChildrenHTML(elem);
+      htmlComp += '\n</MDClayoutGridCell>';
+
+      return htmlComp;
     }
-}
+  }
+};
 </script>
-
-<style lang="scss">
-
-</style>

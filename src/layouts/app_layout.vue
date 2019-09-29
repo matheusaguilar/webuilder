@@ -12,6 +12,7 @@
           <button
             class="mdc-icon-button material-icons mdc-top-app-bar__action-item--unbounded"
             aria-label="Download"
+            @click="downloadComponents()"
           >file_download</button>
         </section>
       </div>
@@ -110,13 +111,15 @@ class CompElement {
   public instance: Object;
   public children: Array<CompElement> = [];
   public comp: Object;
+  public slot: number;
   
-  constructor(name: string, element: Element, instance: Object, children: Array<CompElement>, comp: Object){
+  constructor(name: string, element: Element, instance: Object, children: Array<CompElement>, comp: Object, slot: number){
     this.name = name;
     this.element = element;
     this.instance = instance;
     this.children = children;
     this.comp = comp;
+    this.slot = slot;
   }
 }
 
@@ -181,6 +184,12 @@ export default class AppLayout extends Vue {
     this.initIframe();
   }
 
+  downloadComponents(){
+    for(const elem of this.deviceElements){
+      console.log((<any>elem.instance).wbGetHTML(elem));
+    }
+  }
+
   /**
    * init iframe.
    */
@@ -218,6 +227,7 @@ export default class AppLayout extends Vue {
       iframe.contentWindow.document.body.style.display = 'block';
       iframe.contentWindow.document.body.style.backgroundColor = 'white';
       iframe.contentWindow.document.body.style.height = 'initial';
+      iframe.contentWindow.document.body.style.overflowX = 'hidden';
       iframe.contentWindow.document.close();
     }
   }
@@ -289,7 +299,7 @@ export default class AppLayout extends Vue {
    * @param instance the vueComponent mounted instance.
    * @param name the name of component.
    */
-  createCompContainer(instance: any, name: any, comp: any) {
+  createCompContainer(instance: any, name: any, comp: any, slot?: any) {
     this.removeCompActiveClass();
 
     const uniqueName = name + "-" + this.nameUniqueIndex;
@@ -319,7 +329,8 @@ export default class AppLayout extends Vue {
       element: instance.$el,
       instance: instance,
       children: [],
-      comp: comp
+      comp: comp,
+      slot: !!slot? slot : 0
     };
   }
 
@@ -339,20 +350,21 @@ export default class AppLayout extends Vue {
   addElementChild(obj: any) {
     const name = obj.event.dataTransfer.getData("text");
     const comp = this.getComponentByName(name);
+    const elem = this.getSelectElementRecursive(obj.element);
 
-    if (comp) {
-
-      
+    if (!!comp && !!elem) {
       const instance = new comp.value();
       instance.$mount();
-      this.elementSelected = this.createCompContainer(instance, name, comp);
 
-      const elem = this.getSelectElementRecursive(obj.element);
-      if (elem) {
-        const inserted = this.insertHtmlWBuilder(elem.element, this.elementSelected.element);
-        if (inserted){
-          elem.children.push(this.elementSelected);
-        }
+      if (elem.instance.__wbInsertSlot !== undefined){
+        this.elementSelected = this.createCompContainer(instance, name, comp, elem.instance.__wbInsertSlot);
+      } else{
+        this.elementSelected = this.createCompContainer(instance, name, comp);
+      }
+
+      const inserted = this.insertHtmlWBuilder(elem, this.elementSelected.element);
+      if (inserted){
+        elem.children.push(this.elementSelected);
       }
     }
   }
@@ -365,7 +377,7 @@ export default class AppLayout extends Vue {
     if (iframeDoc){
       const activeElement = iframeDoc.querySelectorAll(".wbcomp-active");
       activeElement.forEach((elem) => {
-        elem.className = elem.className.replace(" wbcomp-active", "");
+        elem.className = elem.className.replace(/ wbcomp-active/g, "");
       });
     }
   }
@@ -509,9 +521,14 @@ export default class AppLayout extends Vue {
    * insert element html into WBuilder class inside another element.
    */
   insertHtmlWBuilder(elem: any, insertElem: any) {
-    const nodes = elem.querySelectorAll(".wbuilder-insert");
+    const nodes = elem.element.querySelectorAll(".wbuilder-insert");
     if (nodes.length > 0) {
-      const parent = nodes[0].parentNode;
+      let parent = null;
+      if (elem.instance.__wbInsertSlot !== undefined && elem.instance.__wbInsertSlot <= nodes.length){
+        parent = nodes[elem.instance.__wbInsertSlot].parentNode;
+      } else{
+        parent = nodes[0].parentNode;
+      }
       parent.appendChild(insertElem);
       return true;
     }

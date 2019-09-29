@@ -6,7 +6,8 @@
 
         <h5 v-if="typeof propValues[index] === 'object'">
           <select @change="changeProps(index, $event)">
-            <option v-for="(item, itemIndex) in propValues[index].options" :key="itemIndex">{{item}}</option>
+            <option v-for="(item, itemIndex) in propValues[index].options" :key="itemIndex"
+              :selected="propValues[index].value === itemIndex">{{item}}</option>
           </select>
         </h5>
 
@@ -38,6 +39,9 @@ export default class CompProps extends Vue {
 
   @Watch('component')
   componentChange(val: any, oldVal: any) {
+    this.propLabels = [];
+    this.propValues = [];
+    
     if (val){
       const instance = val.instance;
 
@@ -46,9 +50,10 @@ export default class CompProps extends Vue {
         for(var i=0; i<this.propLabels.length; i++){
           if (instance.$data[this.propLabels[i] + '__Options']){ //Select
             this.propValues.push({
-              options: instance.$data[this.propLabels[i] + '__Options']
+              options: instance.$data[this.propLabels[i] + '__Options'],
+              value: instance[this.propLabels[i]]
             });
-          
+
           } else{ //Input
             this.propValues.push(instance[this.propLabels[i]]);
           }
