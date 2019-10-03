@@ -1,5 +1,13 @@
 export class WrapperUtil{
 
+    static getTag(tagName: string, elem: any, hideInner: boolean, slot: any){
+        let tag = !!elem.element.getAttribute("style") || elem.element.querySelectorAll('[style]').length > 0? 
+          `${tagName} id="${elem.element.dataset.compname}"` : tagName;
+
+        return !slot? `\n<${tag}>${this.getChildrenHTML(elem, hideInner)}\n</${tagName}>`
+            : `\n<${tag}>${this.getChildrenBySlotHTML(elem, hideInner, slot)}\n</${tagName}>`;
+    }
+
     static getChildrenHTML(element: any, hideInner: boolean){
         let html = '';
         if (element.children.length > 0){

@@ -19,11 +19,7 @@ export default {
   },
   methods: {
     wbGetHTML(elem){
-      let htmlComp = '\n<MDCLayoutGrid>\n<MDCLayoutGridInner>';
-      htmlComp += WrapperUtil.getChildrenHTML(elem, true);
-      htmlComp += '\n</MDCLayoutGridInner>\n</MDCLayoutGrid>';
-
-      return htmlComp;
+      return WrapperUtil.getTag('MDCLayoutGrid', elem, true);
     }
   }
 };

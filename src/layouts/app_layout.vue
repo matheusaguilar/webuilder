@@ -188,47 +188,66 @@ export default class AppLayout extends Vue {
     for(const elem of this.deviceElements){
       console.log((<any>elem.instance).wbGetHTML(elem));
     }
+
+    // const iframeDeviceLook = this.getFrameDeviceLook();
+    // if (iframeDeviceLook){
+    //   // const styleElements = iframeDeviceLook.querySelectorAll('[style]');
+    //   const styleElements = iframeDeviceLook.querySelectorAll('.wbcursor');
+    //   styleElements.forEach((elem) => {
+    //     console.log(elem);
+    //   });
+    // }
+  }
+
+  getElementBody(element: any){
+    let ele = element;
+    while(ele.nodeName != 'BODY'){
+      console.log(ele);
+      ele = ele.parentNode;
+    }
+
+    console.log(ele);
   }
 
   /**
    * init iframe.
    */
   initIframe(){
-    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
-    if (!!iframe && !!iframe.contentWindow){
-      iframe.contentWindow.document.open();
-      iframe.contentWindow.document.write('<body></body>');
+    const iframeDocument = this.getIframeDocument();
+    if (iframeDocument){
+      iframeDocument.open();
+      iframeDocument.write('<body></body>');
 
       //meta
       var meta = document.createElement('meta');
       meta.name = "viewport";
       meta.content = "width=device-width, initial-scale=1.0";
-      iframe.contentWindow.document.head.appendChild(meta);
+      iframeDocument.head.appendChild(meta);
 
       //fonts
       var fonts = document.querySelectorAll('link[as="font"]');
       for (var i=0; i<fonts.length; i++){
-        iframe.contentWindow.document.head.appendChild(fonts[i].cloneNode(true));
+        iframeDocument.head.appendChild(fonts[i].cloneNode(true));
       }
 
       //stylesheets
       var styles = document.querySelectorAll('link[rel="stylesheet"]');
       for (var i=0; i<styles.length; i++){
-        iframe.contentWindow.document.head.appendChild(styles[i].cloneNode(true));
+        iframeDocument.head.appendChild(styles[i].cloneNode(true));
       }
 
       //styles
       var stylesElements = document.getElementsByTagName('style');
       for (var i=0; i<stylesElements.length; i++){
-        iframe.contentWindow.document.head.appendChild(stylesElements[i].cloneNode(true));
+        iframeDocument.head.appendChild(stylesElements[i].cloneNode(true));
       }
 
-      iframe.contentWindow.document.body.style.margin = '0px';
-      iframe.contentWindow.document.body.style.display = 'block';
-      iframe.contentWindow.document.body.style.backgroundColor = 'white';
-      iframe.contentWindow.document.body.style.height = 'initial';
-      iframe.contentWindow.document.body.style.overflowX = 'hidden';
-      iframe.contentWindow.document.close();
+      iframeDocument.body.style.margin = '0px';
+      iframeDocument.body.style.display = 'block';
+      iframeDocument.body.style.backgroundColor = 'white';
+      iframeDocument.body.style.height = 'initial';
+      iframeDocument.body.style.overflowX = 'hidden';
+      iframeDocument.close();
     }
   }
 
@@ -236,7 +255,7 @@ export default class AppLayout extends Vue {
    * get the iframe document.
    */
   getIframeDocument(){
-     const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
+    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
     if (!!iframe && !!iframe.contentWindow){
       return iframe.contentWindow.document;
     }
@@ -284,13 +303,6 @@ export default class AppLayout extends Vue {
       instance.$mount();
       this.elementSelected = this.createCompContainer(instance, name, comp);
       this.addElemToDeviceLook(this.elementSelected);
-
-      //props
-      // var instance = new ComponentClass({
-      //   propsData: { type: 'primary' }
-      // })
-      //slots
-      // instance.$slots.default = [ 'Click me!' ]
     }
   }
 
@@ -306,8 +318,7 @@ export default class AppLayout extends Vue {
     this.nameUniqueIndex++;
 
     instance.$el.setAttribute("data-compname", uniqueName);
-    instance.$el.className += " wbcomp-active";
-    instance.$el.style.cursor = "pointer";
+    instance.$el.className += " wbcomp-active wbcursor";
 
     instance.$el.addEventListener("dragover", (event: any) => {
       this.allowDropComponent(event);
@@ -670,5 +681,9 @@ body {
 
 .wbcomp-active {
   border: 1px solid $selected;
+}
+
+.wbcursor{
+  cursor: pointer;
 }
 </style>
