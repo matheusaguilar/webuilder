@@ -74,22 +74,17 @@ export default {
         }
       }
     },
-
     wbGetHTML(elem){
-      //slot 0
-      let htmlComp = `\n<WBMDCtopAppBar title="${this.title}" variant="${this.variant__Options[this.variant]}">`;
-      htmlComp += WrapperUtil.getChildrenBySlotHTML(elem, true, 0);
-      htmlComp += '\n</WBMDCtopAppBar>';
+      // slot 0
+      let htmlComp = WrapperUtil.getInstance().getTag('WBMDCtopAppBar', 
+        `title="${this.title}" variant="${this.variant__Options[this.variant]}"`, elem, true, 0);
 
-      //slot 1
-      htmlComp += `\n<WBMDCdrawer>`;
-      htmlComp += WrapperUtil.getChildrenBySlotHTML(elem, true, 1);
-      htmlComp += '\n</WBMDCdrawer>';
+      // slot 1
+      htmlComp += WrapperUtil.getInstance().getTag('WBMDCdrawer', null, elem, true, 1);
 
-      //slot 2
-      htmlComp += `\n<WBMDCdrawerMainContent topappbar="${this.variant__Options[this.variant]}">`;
-      htmlComp += WrapperUtil.getChildrenBySlotHTML(elem, true, 2);
-      htmlComp += '\n</WBMDCdrawerMainContent>';
+      // slot 2
+      htmlComp += WrapperUtil.getInstance().getTag('WBMDCdrawerMainContent', 
+        `topappbar="${this.variant__Options[this.variant]}"`, elem, true, 2);
 
       return htmlComp;
     }

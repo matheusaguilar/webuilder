@@ -1,11 +1,12 @@
 <template>
-    <div :class="classes">
+    <div :class="classes" :id="id">
         <slot></slot>
     </div>
 </template>
 <script>
 export default {
     props:{
+        id: null,
         desktop: {default: '12'},
         tablet: {default: '8'},
         phone: {default: '4'}

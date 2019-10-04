@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     wbGetHTML(elem){
-      return WrapperUtil.getTag('MDCLayoutGrid', elem, true);
+      return WrapperUtil.getInstance().getTag('MDCLayoutGrid', null, elem, true);
     }
   }
 };

@@ -24,11 +24,8 @@ export default {
   },
   methods: {
     wbGetHTML(elem){
-      let htmlComp = `\n<MDClayoutGridCell desktop="${this.desktop}" tablet="${this.tablet}" phone="${this.phone}">`;
-      htmlComp += WrapperUtil.getChildrenHTML(elem);
-      htmlComp += '\n</MDClayoutGridCell>';
-
-      return htmlComp;
+      return WrapperUtil.getInstance().getTag('MDClayoutGridCell', 
+        `desktop="${this.desktop}" tablet="${this.tablet}" phone="${this.phone}"`, elem);
     }
   }
 };

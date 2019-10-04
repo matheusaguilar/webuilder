@@ -1,5 +1,5 @@
 <template>
-    <div class="mdc-drawer-app-content" :style="{ paddingTop: padding_top}">
+    <div :class="'mdc-drawer-app-content ' + padding_top">
       <main class="main-content" id="wbMDCMainContent">App Content
         <slot></slot>
       </main>
@@ -11,20 +11,20 @@ export default {
   props: ['topappbar'],
   data: function(){
     return {
-      padding_top: '64px'
+      padding_top: 'padding-standard'
     }
   },
   methods: {
     updatePadding(){
       switch(this.topappbar){
         case 'standard':
-          this.padding_top = '64px';
+          this.padding_top = 'padding-standard';
           break;
         case 'fixed':
-          this.padding_top = '64px';
+          this.padding_top = 'padding-standard';
           break;
         case 'dense':
-          this.padding_top = '48px';
+          this.padding_top = 'padding-dense';
           break;
       }
     }
@@ -41,5 +41,13 @@ export default {
 .main-content {
   overflow: auto;
   height: 100%;
+}
+
+.padding-standard{
+  padding-top: 64px;
+}
+
+.padding-dense{
+  padding-top: 48px;
 }
 </style>
