@@ -199,17 +199,6 @@ export default class AppLayout extends Vue {
     }
     html += '\n</div>\n</template>';
 
-    // get the style class of components
-    html += '\n\n<style lang="scss">';
-    const iframeDeviceLook = this.getFrameDeviceLook();
-    if (iframeDeviceLook){
-      const styleElements = iframeDeviceLook.querySelectorAll('[style]');
-      styleElements.forEach((elem) => {
-        html += '\n' + this.getStyleComp(elem);
-      });
-    }
-    html += '\n</style>';
-
     // get script imports
     let importTags: any = [];
     let compNames = {};
@@ -225,16 +214,27 @@ export default class AppLayout extends Vue {
         html += '\nimport ' + tag + ' from \'path/' + tag + '.vue\';';
     }
     //component vue
-    html += '\n\n@Component({';
+    html += '\n\n@Component({\ncomponents: {';
     for(let i=0; i<importTags.length; i++){
       html += '\n' + importTags[i];
       if (i != importTags.length - 1){
         html += ','
       }
     }
-    html += '\n})';
+    html += '\n}\n})';
     html += '\nexport default class MyClass extends Vue {\n\n}';
     html += '\n<' + '/script>';
+
+    // get the style class of components
+    html += '\n\n<style lang="scss">';
+    const iframeDeviceLook = this.getFrameDeviceLook();
+    if (iframeDeviceLook){
+      const styleElements = iframeDeviceLook.querySelectorAll('[style]');
+      styleElements.forEach((elem) => {
+        html += '\n' + this.getStyleComp(elem);
+      });
+    }
+    html += '\n</style>';
 
     console.log(html);
   }
