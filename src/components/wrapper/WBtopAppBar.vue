@@ -1,21 +1,21 @@
 <template>
   <div>
-    <WBMDCtopAppBar :title="title" :variant="variant__Options[variant]">
+    <WBtopAppBar :title="title" :variant="variant__Options[variant]">
       <div class="wbuilder-insert"></div>
-    </WBMDCtopAppBar>
-    <WBMDCdrawer>
+    </WBtopAppBar>
+    <WBdrawer>
       <div class="wbuilder-insert"></div>
-    </WBMDCdrawer>
-    <WBMDCdrawerMainContent :topappbar="variant__Options[variant]">
+    </WBdrawer>
+    <WBdrawerMainContent :topappbar="variant__Options[variant]">
       <div class="wbuilder-insert"></div>
-    </WBMDCdrawerMainContent>
+    </WBdrawerMainContent>
   </div>
 </template>
 
 <script>
-import WBMDCtopAppBar from "../designSystem/MDC_topAppBar";
-import WBMDCdrawer from "../designSystem/MDC_drawer";
-import WBMDCdrawerMainContent from "../designSystem/MDC_drawerMainContent";
+import WBtopAppBar from "../designSystem/WBtopAppBar";
+import WBdrawer from "../designSystem/WBdrawer";
+import WBdrawerMainContent from "../designSystem/WBdrawerMainContent";
 
 import { MDCTopAppBar } from "@material/top-app-bar";
 import { MDCDrawer } from "@material/drawer";
@@ -24,9 +24,9 @@ import { WrapperUtil } from "./../../pages_src/ts/wrapperUtil";
 
 export default {
   components: {
-    WBMDCtopAppBar,
-    WBMDCdrawer,
-    WBMDCdrawerMainContent
+    WBtopAppBar,
+    WBdrawer,
+    WBdrawerMainContent
   },
   props: {
     variant: { default: 0 },
@@ -74,17 +74,20 @@ export default {
         }
       }
     },
+    wbGetTag(){
+      return ['WBtopAppBar', 'WBdrawer', 'WBdrawerMainContent'];
+    },
     wbGetHTML(elem){
       // slot 0
-      let htmlComp = WrapperUtil.getInstance().getTag('WBMDCtopAppBar', 
-        `title="${this.title}" variant="${this.variant__Options[this.variant]}"`, elem, true, 0);
+      let htmlComp = WrapperUtil.getInstance().getTag([this.wbGetTag()[0]], 
+        [`title="${this.title}" variant="${this.variant__Options[this.variant]}"`], elem, true, 0);
 
       // slot 1
-      htmlComp += WrapperUtil.getInstance().getTag('WBMDCdrawer', null, elem, true, 1);
+      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[1]], null, elem, true, 1);
 
       // slot 2
-      htmlComp += WrapperUtil.getInstance().getTag('WBMDCdrawerMainContent', 
-        `topappbar="${this.variant__Options[this.variant]}"`, elem, true, 2);
+      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[2]], 
+        [`topappbar="${this.variant__Options[this.variant]}"`], elem, true, 2);
 
       return htmlComp;
     }

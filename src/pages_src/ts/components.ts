@@ -1,11 +1,11 @@
-import MDC_LayoutGrid from '_Components/wrapper/MDC_layoutGrid.vue';
-import MDC_LayoutGridCell from '_Components/wrapper/MDC_layoutGridCell.vue';
-import MDC_TopAppBar from '_Components/wrapper/MDC_topAppBar.vue';
+import WBlayoutGrid from '_Components/wrapper/WBlayoutGrid.vue';
+import WBlayoutGridCell from '_Components/wrapper/WBlayoutGridCell.vue';
+import WBtopAppBar from '_Components/wrapper/WBtopAppBar.vue';
 
 const ComponentArray = [
-    MDC_LayoutGrid,
-    MDC_LayoutGridCell,
-    MDC_TopAppBar
+    WBlayoutGrid,
+    WBlayoutGridCell,
+    WBtopAppBar
 ]
 
 export class ComponentRegister {

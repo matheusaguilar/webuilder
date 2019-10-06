@@ -12,6 +12,20 @@ export class WrapperUtil {
         return this.instance;
     }
 
+    public getImportTags(elem: any){
+        let tags = elem.instance.wbGetTag(elem);
+        tags = tags.concat(this.getImportChildren(elem.children));
+        return tags;
+    }
+
+    public getImportChildren(children: Array<any>){
+        let tags: any = [];
+        for(const child of children){
+            tags = tags.concat(this.getImportTags(child));
+        }
+        return tags;
+    }
+
     /**
      * get the html of component.
      * @param tagName the tag of component.
@@ -20,7 +34,7 @@ export class WrapperUtil {
      * @param hideInner if false hide the innerHTML of element.
      * @param slot used to select which innerHTML of wbuilder-insert will be selected.
      */
-    public getTag(tagName: string, tagItens: string, elem: any, hideInner: boolean, slot: any) {
+    public getTag(tagName: Array<string>, tagItens: Array<string>, elem: any, hideInner: boolean, slot: any) {
         // get all child elements with style
         const styleElements = elem.element.querySelectorAll('[style]');
         let hasStyleChild = false;
@@ -33,17 +47,32 @@ export class WrapperUtil {
             }
         }
         
-        // create tag name
-        let tag = (!!elem.element.getAttribute("style") || hasStyleChild) && !elem.element.id ?
-            `${tagName} id="${elem.element.dataset.compname}"` : tagName;
+        let tagInit = '';
+        let tagEnd = '';
 
-        // add tag itens
-        if (tagItens) {
-            tag += ' ' + tagItens;
+        //init
+        for(let i=0; i<tagName.length; i++){
+            tagInit += '\n<';
+            if (i == 0){
+                tagInit += (!!elem.element.getAttribute("style") || hasStyleChild) && !elem.element.id ?
+                    `${tagName[i]} id="${elem.element.dataset.compname}"` : tagName[i];
+            } else {
+                tagInit += tagName[i];
+            }
+            if (!!tagItens && !!tagItens[i]){
+                tagInit += ' ' + tagItens[i] + '>';
+            } else{
+                tagInit += '>';
+            }
         }
 
-        return slot == undefined ? `\n<${tag}>${this.getChildrenHTML(elem, hideInner)}\n</${tagName}>`
-            : `\n<${tag}>${this.getChildrenBySlotHTML(elem, hideInner, slot)}\n</${tagName}>`;
+        //end
+        for(let i=tagName.length - 1; i>=0; i--){
+            tagEnd += '\n</' + tagName[i] + '>';
+        }
+
+        return slot == undefined ? tagInit + this.getChildrenHTML(elem, hideInner) + tagEnd
+            : tagInit + this.getChildrenBySlotHTML(elem, hideInner, slot) + tagEnd;
     }
 
     /**

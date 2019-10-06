@@ -105,15 +105,17 @@ import { ComponentRegister, ComponentsLoader } from "./../pages_src/ts/component
 import { KeyBoardEvents } from "./../pages_src/ts/keyboard";
 import { DeviceLook } from "./../pages_src/ts/deviceLook";
 
+import { WrapperUtil } from "./../pages_src/ts/wrapperUtil";
+
 class CompElement {
   public name: string;
   public element: Element;
   public instance: Object;
   public children: Array<CompElement> = [];
-  public comp: Object;
+  public comp: ComponentRegister;
   public slot: number;
   
-  constructor(name: string, element: Element, instance: Object, children: Array<CompElement>, comp: Object, slot: number){
+  constructor(name: string, element: Element, instance: Object, children: Array<CompElement>, comp: ComponentRegister, slot: number){
     this.name = name;
     this.element = element;
     this.instance = instance;
@@ -184,29 +186,78 @@ export default class AppLayout extends Vue {
     this.initIframe();
   }
 
+  /**
+   * generate the code needed to create the web page.
+   */
   downloadComponents(){
+    let html = '';
+    
+    html += '<template>\n<div>';
+    // get the html of components
     for(const elem of this.deviceElements){
-      console.log((<any>elem.instance).wbGetHTML(elem));
+      html += (<any>elem.instance).wbGetHTML(elem);
     }
+    html += '\n</div>\n</template>';
 
-    // const iframeDeviceLook = this.getFrameDeviceLook();
-    // if (iframeDeviceLook){
-    //   // const styleElements = iframeDeviceLook.querySelectorAll('[style]');
-    //   const styleElements = iframeDeviceLook.querySelectorAll('.wbcursor');
-    //   styleElements.forEach((elem) => {
-    //     console.log(elem);
-    //   });
-    // }
+    // get the style class of components
+    html += '\n\n<style lang="scss">';
+    const iframeDeviceLook = this.getFrameDeviceLook();
+    if (iframeDeviceLook){
+      const styleElements = iframeDeviceLook.querySelectorAll('[style]');
+      styleElements.forEach((elem) => {
+        html += '\n' + this.getStyleComp(elem);
+      });
+    }
+    html += '\n</style>';
+
+    // get script imports
+    let importTags: any = [];
+    let compNames = {};
+
+    html += '\n\n<script lang="ts">\n';
+    html += 'import { Vue, Component, Prop } from \'vue-property-decorator\';';
+    // get imports of components
+    for(const elem of this.deviceElements){
+      importTags = importTags.concat(WrapperUtil.getInstance().getImportTags(elem));
+    }
+    importTags = importTags.filter((v: any, i: any) => importTags.indexOf(v) === i);
+    for(const tag of importTags){
+        html += '\nimport ' + tag + ' from \'path/' + tag + '.vue\';';
+    }
+    //component vue
+    html += '\n\n@Component({';
+    for(let i=0; i<importTags.length; i++){
+      html += '\n' + importTags[i];
+      if (i != importTags.length - 1){
+        html += ','
+      }
+    }
+    html += '\n})';
+    html += '\nexport default class MyClass extends Vue {\n\n}';
+    html += '\n<' + '/script>';
+
+    console.log(html);
   }
 
-  getElementBody(element: any){
+  getStyleComp(element: any){
+    let styleClass = [];
     let ele = element;
-    while(ele.nodeName != 'BODY'){
-      console.log(ele);
+
+    while(!ele.dataset.compname && !ele.id){
+      styleClass.push(ele.className? '.' + ele.className : ele.nodeName);
       ele = ele.parentNode;
     }
+    styleClass.push(ele.id? '#' + ele.id : '#' + ele.dataset.compname);
 
-    console.log(ele);
+    let buildClass = '';
+    for(let i=styleClass.length - 1; i>=0; i--){
+      if (i != styleClass.length - 1){
+        buildClass+= ' ';
+      }
+      buildClass += styleClass[i];
+    }
+
+    return  buildClass += ` {\n ${element.style.cssText} \n}`
   }
 
   /**
