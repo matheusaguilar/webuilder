@@ -3,7 +3,7 @@
     <WBtopAppBar :title="title" :variant="variant__Options[variant]">
       <div class="wbuilder-insert"></div>
     </WBtopAppBar>
-    <WBdrawer>
+    <WBdrawer :topappbar="variant__Options[variant]">
       <div class="wbuilder-insert"></div>
     </WBdrawer>
     <WBdrawerMainContent :topappbar="variant__Options[variant]">
@@ -29,8 +29,8 @@ export default {
     WBdrawerMainContent
   },
   props: {
-    variant: { default: 0 },
     title: { default: 'Title' },
+    variant: { default: 0 },
     __wbInsertSlot: { default: 0 }
   },
   data: function() {
@@ -83,7 +83,8 @@ export default {
         [`title="${this.title}" variant="${this.variant__Options[this.variant]}"`], elem, true, 0);
 
       // slot 1
-      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[1]], null, elem, true, 1);
+      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[1]], 
+        [`topappbar="${this.variant__Options[this.variant]}"`], elem, true, 1);
 
       // slot 2
       htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[2]], 

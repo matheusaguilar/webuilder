@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss">
-.error-container{
+.wb-error-container{
     width: 100%;
     min-height: 600px;
     padding: 16px;

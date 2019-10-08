@@ -1,11 +1,13 @@
 import WBlayoutGrid from '_Components/wrapper/WBlayoutGrid.vue';
 import WBlayoutGridCell from '_Components/wrapper/WBlayoutGridCell.vue';
 import WBtopAppBar from '_Components/wrapper/WBtopAppBar.vue';
+import WBbutton from '_Components/wrapper/WBbutton.vue';
 
 const ComponentArray = [
     WBlayoutGrid,
     WBlayoutGridCell,
-    WBtopAppBar
+    WBtopAppBar,
+    WBbutton
 ]
 
 export class ComponentRegister {

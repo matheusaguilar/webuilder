@@ -1,6 +1,6 @@
 <template>
     <div :class="'mdc-drawer-app-content ' + padding_top">
-      <main class="main-content" id="wbMDCMainContent">App Content
+      <main class="main-content" id="wbMDCMainContent">
         <slot></slot>
       </main>
     </div>

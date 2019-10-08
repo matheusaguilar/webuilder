@@ -1,5 +1,5 @@
 <template>
-  <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust" id="wbMDCDrawer">
+  <aside :class="'mdc-drawer mdc-drawer--dismissible ' + padding_top" id="wbMDCDrawer">
     <div class="mdc-drawer__content">
       <slot></slot>
 
@@ -21,6 +21,37 @@
   </aside>
 </template>
 
+<script>
+export default {
+  props: ['topappbar'],
+  data: function(){
+    return {
+      padding_top: 'padding-standard'
+    }
+  },
+  methods: {
+    updatePadding(){
+      switch(this.topappbar){
+        case 'standard':
+          this.padding_top = 'padding-standard';
+          break;
+        case 'fixed':
+          this.padding_top = 'padding-standard';
+          break;
+        case 'dense':
+          this.padding_top = 'padding-dense';
+          break;
+      }
+    }
+  },
+  watch: {
+    topappbar(){
+      this.updatePadding();
+    }
+  }
+}
+</script>
+
 <style lang="scss">
 body {
   display: flex;
@@ -39,5 +70,13 @@ body {
 
 .mdc-top-app-bar {
   z-index: 7;
+}
+
+.padding-standard{
+  padding-top: 64px;
+}
+
+.padding-dense{
+  padding-top: 48px;
 }
 </style>

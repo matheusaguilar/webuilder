@@ -4,7 +4,7 @@
       <div class="wb-prop-elem">
         <label :for="'input' + index">{{prop}}:</label>
 
-        <h5 v-if="typeof propValues[index] === 'object'">
+        <h5 v-if="typeof propValues[index] === 'object'" style="margin: 10px 0px">
           <select @change="changeProps(index, $event)">
             <option v-for="(item, itemIndex) in propValues[index].options" :key="itemIndex"
               :selected="propValues[index].value === itemIndex">{{item}}</option>
