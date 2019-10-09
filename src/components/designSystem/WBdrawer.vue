@@ -1,5 +1,5 @@
 <template>
-  <aside :class="'mdc-drawer mdc-drawer--dismissible ' + padding_top" id="wbMDCDrawer">
+  <aside :class="'mdc-drawer mdc-drawer--dismissible ' + paddingTop" id="wbMDCDrawer">
     <div class="mdc-drawer__content">
       <slot></slot>
 
@@ -24,29 +24,9 @@
 <script>
 export default {
   props: ['topappbar'],
-  data: function(){
-    return {
-      padding_top: 'padding-standard'
-    }
-  },
-  methods: {
-    updatePadding(){
-      switch(this.topappbar){
-        case 'standard':
-          this.padding_top = 'padding-standard';
-          break;
-        case 'fixed':
-          this.padding_top = 'padding-standard';
-          break;
-        case 'dense':
-          this.padding_top = 'padding-dense';
-          break;
-      }
-    }
-  },
-  watch: {
-    topappbar(){
-      this.updatePadding();
+  computed: {
+    paddingTop: function(){
+      return this.topappbar == 'dense'? 'padding-dense' : 'padding-standard';
     }
   }
 }

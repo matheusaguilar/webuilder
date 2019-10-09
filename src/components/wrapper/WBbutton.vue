@@ -1,5 +1,7 @@
 <template>
-  <WBbutton :variant="variant__Options[variant]" :text="text" :dense="dense__Options[dense]"></WBbutton>
+  <WBbutton :variant="variant__Options[variant]" :text="text" :dense="dense__Check"
+    :left-icon="leftIcon" :right-icon="rightIcon">
+  </WBbutton>
 </template>
 
 
@@ -14,7 +16,9 @@ export default {
   props: {
     variant: { default: 0 },
     text: { default: 'Text' },
-    dense: { default: 0 }
+    dense: { default: 0 },
+    leftIcon: { default: '' },
+    rightIcon: { default: '' }
   },
   data(){
     return{
@@ -24,10 +28,7 @@ export default {
         'outlined',
         'unelevated'
       ],
-      dense__Options: [
-        'no',
-        'yes'
-      ]
+      dense__Check: false
     }
   },
   methods: {
@@ -36,7 +37,7 @@ export default {
     },
     wbGetHTML(elem){
       return WrapperUtil.getInstance().getTag(this.wbGetTag(),
-        [`variant="${this.variant__Options[this.variant]}" text="${this.text}"`], elem, true);
+        [`variant="${this.variant__Options[this.variant]}" text="${this.text}" dense="${this.dense__Check}"`], elem, true);
     }
   }
 };

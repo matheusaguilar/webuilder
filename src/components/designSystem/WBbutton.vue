@@ -1,21 +1,9 @@
 <template>
-    <div>
-        <button :class="'mdc-button' + denseClass" v-if="variant === 'text'" :id="id">
-            <span class="mdc-button__label">{{text}}</span>
-        </button>
-
-        <button :class="'mdc-button mdc-button--outlined' + denseClass" v-if="variant === 'outlined'" :id="id">
-            <span class="mdc-button__label">{{text}}</span>
-        </button>
-
-        <button :class="'mdc-button mdc-button--raised' + denseClass" v-if="variant === 'raised'" :id="id">
-            <span class="mdc-button__label">{{text}}</span>
-        </button>
-
-        <button :class="'mdc-button mdc-button--unelevated' + denseClass" v-if="variant === 'unelevated'" :id="id">
-            <span class="mdc-button__label">{{text}}</span>
-        </button>
-    </div>
+    <button :class="'mdc-button' + buttonClass + denseClass" :id="id">
+        <i class="material-icons mdc-button__icon" aria-hidden="true" v-if="leftIcon">{{leftIcon}}</i>
+        <span class="mdc-button__label">{{text}}</span>
+        <i class="material-icons mdc-button__icon" aria-hidden="true" v-if="rightIcon">{{rightIcon}}</i>
+    </button>
 </template>
 
 <script>
@@ -24,20 +12,27 @@ export default {
         id: null,
         text: { default: 'Text' },
         variant: { default: 'raised' },
-        dense: { default: 'no' }
+        dense: { default: false },
+        leftIcon: { default: '' },
+        rightIcon: { default: '' }
     },
-    data(){
-        return{
-            denseClass: ''
-        }
-    },
-    watch: {
-        dense(newVal, oldVal){
-            if (newVal == 'yes'){
-                this.denseClass = ' mdc-button--dense';
-            } else{
-                this.denseClass = '';
+    computed: {
+        buttonClass: function(){
+            switch(this.variant){
+                case 'text':
+                    return '';
+                case 'outlined':
+                    return ' mdc-button--outlined';
+                case 'raised':
+                    return ' mdc-button--raised';
+                case 'unelevated':
+                    return ' mdc-button--unelevated';
+                default:
+                    return '';
             }
+        },
+        denseClass: function(){
+            return this.dense? ' mdc-button--dense' : '';
         }
     }
 }
