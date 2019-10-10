@@ -1,7 +1,7 @@
 <template>
     <button class="mdc-icon-button" :id="id">
-        <i class="material-icons mdc-icon-button__icon">{{iconOn}}</i>
-        <i class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on" v-if="icon">{{icon}}</i>
+        <i class="material-icons mdc-icon-button__icon">{{icon}}</i>
+        <i class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on" v-if="iconOn">{{iconOn}}</i>
     </button>
 </template>
 
@@ -9,8 +9,8 @@
 export default {
     props: {
         id: null,
-        icon: { default: 'favorite' },
-        iconOn: { default: 'favorite_border' }
+        icon: { default: 'favorite_border' },
+        iconOn: { default: 'favorite' }
     }
 }
 </script>

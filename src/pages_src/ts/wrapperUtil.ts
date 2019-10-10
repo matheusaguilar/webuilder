@@ -3,7 +3,7 @@ export class WrapperUtil {
     static instance: WrapperUtil | null = null;
 
     /**
-     * get an instance of WrapperUtil
+     * get an instance of WrapperUtil.
      */
     public static getInstance(): WrapperUtil{
         if (!this.instance){
@@ -12,13 +12,19 @@ export class WrapperUtil {
         return this.instance;
     }
 
+    /**
+     * get imported tags.
+     */
     public getImportTags(elem: any){
         let tags = elem.instance.wbGetTag(elem);
         tags = tags.concat(this.getImportChildren(elem.children));
         return tags;
     }
 
-    public getImportChildren(children: Array<any>){
+    /**
+     * get imported children tags recursive.
+     */
+    private getImportChildren(children: Array<any>){
         let tags: any = [];
         for(const child of children){
             tags = tags.concat(this.getImportTags(child));
