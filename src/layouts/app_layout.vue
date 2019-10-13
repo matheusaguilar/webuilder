@@ -230,7 +230,9 @@ export default class AppLayout extends Vue {
     if (iframeDeviceLook){
       const styleElements = iframeDeviceLook.querySelectorAll('[style]');
       styleElements.forEach((elem) => {
-        html += '\n' + this.getStyleComp(elem);
+        if ((<HTMLElement>elem).style.cssText){
+          html += '\n' + this.getStyleComp(elem);
+        }
       });
     }
     html += '\n</style>';
