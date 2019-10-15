@@ -4,10 +4,6 @@
         <span class="mdc-fab__label">{{text}}</span>
         <i class="material-icons mdc-fab__icon" aria-hidden="true" v-if="rightIcon">{{rightIcon}}</i>
     </button>
-        <!-- <button class="mdc-fab mdc-fab--extended">
-    <span class="material-icons mdc-fab__icon">add</span>
-    <span class="mdc-fab__label">Create</span>
-    </button> -->
 </template>
 
 <script>

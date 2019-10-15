@@ -1,5 +1,5 @@
 <template>
-    <div class="mdc-layout-grid__inner" :id="id">
+    <div class="mdc-chip-set" :id="id">
         <slot></slot>
     </div>
 </template>

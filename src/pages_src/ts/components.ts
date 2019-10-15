@@ -1,17 +1,23 @@
+import WBtopAppBar from '_Components/wrapper/WBtopAppBar.vue';
 import WBlayoutGrid from '_Components/wrapper/WBlayoutGrid.vue';
 import WBlayoutGridCell from '_Components/wrapper/WBlayoutGridCell.vue';
-import WBtopAppBar from '_Components/wrapper/WBtopAppBar.vue';
 import WBbutton from '_Components/wrapper/WBbutton.vue';
 import WBbuttonFAB from '_Components/wrapper/WBbuttonFAB.vue';
 import WBbuttonIcon from '_Components/wrapper/WBbuttonIcon.vue';
+import WBchipContainer from '_Components/wrapper/WBchipContainer.vue';
+import WBchip from '_Components/wrapper/WBchip.vue';
+import WBcard from '_Components/wrapper/WBcard.vue';
 
 const ComponentArray = [
+    WBtopAppBar,
     WBlayoutGrid,
     WBlayoutGridCell,
-    WBtopAppBar,
     WBbutton,
     WBbuttonFAB,
-    WBbuttonIcon
+    WBbuttonIcon,
+    WBchipContainer,
+    WBchip,
+    WBcard
 ]
 
 export class ComponentRegister {

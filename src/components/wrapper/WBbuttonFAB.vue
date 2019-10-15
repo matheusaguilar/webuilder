@@ -14,7 +14,7 @@ export default {
   props: {
     variant: { default: 0 },
     text: { default: '' },
-    mini: { default: 0 },
+    mini: { default: false },
     leftIcon: { default: 'favorite' },
     rightIcon: { default: '' }
   },

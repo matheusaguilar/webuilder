@@ -16,7 +16,7 @@ export default {
   props: {
     variant: { default: 0 },
     text: { default: 'Text' },
-    dense: { default: 0 },
+    dense: { default: false },
     leftIcon: { default: '' },
     rightIcon: { default: '' }
   },

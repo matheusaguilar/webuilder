@@ -587,9 +587,13 @@ export default class AppLayout extends Vue {
     const nodes = elem.element.querySelectorAll(".wbuilder-insert");
     if (nodes.length > 0) {
       let parent = null;
-      if (elem.instance.__wbInsertSlot !== undefined && elem.instance.__wbInsertSlot <= nodes.length){
-        parent = nodes[elem.instance.__wbInsertSlot].parentNode;
-      } else{
+      if (elem.instance.__wbInsertSlot !== undefined){
+        if (elem.instance.__wbInsertSlot <= nodes.length){
+          parent = nodes[elem.instance.__wbInsertSlot].parentNode;
+        } else {
+          return false;
+        }
+      } else {
         parent = nodes[0].parentNode;
       }
       parent.appendChild(insertElem);
@@ -620,8 +624,18 @@ body {
     z-index: 7;
   }
 
+  .mdc-drawer__content{
+    overflow-y: hidden;
+  }
+
   //Drawer
+  .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing)+.mdc-drawer-app-content{
+    margin-left: 300px;
+  }
+  
   .mdc-drawer {
+    width: 300px;
+
     .mdc-list {
       padding: 8px;
     }
@@ -634,14 +648,15 @@ body {
       min-height: 200px;
       overflow-y: auto;
       margin-bottom: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
     .comps{
-      max-height: 300px;
+      max-height: 280px;
     }
 
     .comp-tree{
-      max-height: 330px;
+      max-height: 280px;
 
       .active {
         color: $selected;
