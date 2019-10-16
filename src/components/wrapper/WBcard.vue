@@ -1,5 +1,9 @@
 <template>
-  <WBcard :variant="variant__Options[variant]" :action="action__Check"></WBcard>
+  <WBcard :variant="variant__Options[variant]" 
+    :title="title" :subtitle="subtitle" :description="description" 
+    :action="action__Check">
+      <div class="wbuilder-insert"></div>
+  </WBcard>
 </template>
 
 <script>
@@ -12,7 +16,10 @@ export default {
   },
   props: {
     variant: { default: 0 },
-    action: { default: false },
+    title: { default: 'Title' },
+    subtitle: { default: 'SubTitle' },
+    description: { default: 'Description' },
+    action: { default: true }
   },
   data(){
     return{
@@ -22,7 +29,7 @@ export default {
         'header',
         'image and text'
       ],
-      action__Check: false
+      action__Check: true
     }
   },
   methods: {
@@ -30,7 +37,10 @@ export default {
       return ['WBcard'];
     },
     wbGetHTML(elem){
-      return WrapperUtil.getInstance().getTag(this.wbGetTag(), null, elem, true);
+      return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
+        [`variant="${this.variant__Options[this.variant]}" 
+        title="${this.title}" subtitle="${this.subtitle}" description="${this.description}" 
+        action="${this.action__Check}"`], elem, true);
     }
   }
 };
