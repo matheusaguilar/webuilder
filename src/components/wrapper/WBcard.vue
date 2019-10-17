@@ -25,9 +25,9 @@ export default {
     return{
       variant__Options: [
         'basic',
-        'text over media',
-        'header',
-        'image and text'
+        'basic-overmedia',
+        'basic-header',
+        'image-text'
       ],
       action__Check: true
     }

@@ -7,6 +7,7 @@ import WBbuttonIcon from '_Components/wrapper/WBbuttonIcon.vue';
 import WBchipContainer from '_Components/wrapper/WBchipContainer.vue';
 import WBchip from '_Components/wrapper/WBchip.vue';
 import WBcard from '_Components/wrapper/WBcard.vue';
+import WBdataTable from '_Components/wrapper/WBdataTable.vue';
 
 const ComponentArray = [
     WBtopAppBar,
@@ -17,7 +18,8 @@ const ComponentArray = [
     WBbuttonIcon,
     WBchipContainer,
     WBchip,
-    WBcard
+    WBcard,
+    WBdataTable
 ]
 
 export class ComponentRegister {
