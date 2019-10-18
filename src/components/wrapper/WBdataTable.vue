@@ -40,11 +40,15 @@ export default {
       return ['WBdataTable', 'WBdataTableHead', 'WBdataTableBody'];
     },
     wbGetHTML(elem){
+      let htmlComp = `\n<${this.wbGetTag()[0]}>`;
+
       // slot 0
-      let htmlComp = WrapperUtil.getInstance().getTag([this.wbGetTag()[0]], null, elem, true, 0);
+      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[1]], null, elem, true, 0);
 
       // slot 1
-      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[1]], null, elem, true, 1);
+      htmlComp += WrapperUtil.getInstance().getTag([this.wbGetTag()[2]], null, elem, true, 1);
+
+      htmlComp += `\n</${this.wbGetTag()[0]}>`;
 
       return htmlComp;
     }
