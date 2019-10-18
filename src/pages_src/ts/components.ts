@@ -8,6 +8,8 @@ import WBchipContainer from '_Components/wrapper/WBchipContainer.vue';
 import WBchip from '_Components/wrapper/WBchip.vue';
 import WBcard from '_Components/wrapper/WBcard.vue';
 import WBdataTable from '_Components/wrapper/WBdataTable.vue';
+import WBdataTableRow from '_Components/wrapper/WBdataTableRow.vue';
+import WBdataTableColumn from '_Components/wrapper/WBdataTableColumn.vue';
 
 const ComponentArray = [
     WBtopAppBar,
@@ -19,7 +21,9 @@ const ComponentArray = [
     WBchipContainer,
     WBchip,
     WBcard,
-    WBdataTable
+    WBdataTable,
+    WBdataTableRow,
+    WBdataTableColumn
 ]
 
 export class ComponentRegister {
