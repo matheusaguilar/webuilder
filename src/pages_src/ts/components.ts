@@ -10,6 +10,7 @@ import WBcard from '_Components/wrapper/WBcard.vue';
 import WBdataTable from '_Components/wrapper/WBdataTable.vue';
 import WBdataTableRow from '_Components/wrapper/WBdataTableRow.vue';
 import WBdataTableColumn from '_Components/wrapper/WBdataTableColumn.vue';
+import WBmodal from '_Components/wrapper/WBmodal.vue';
 
 const ComponentArray = [
     WBtopAppBar,
@@ -23,7 +24,8 @@ const ComponentArray = [
     WBcard,
     WBdataTable,
     WBdataTableRow,
-    WBdataTableColumn
+    WBdataTableColumn,
+    WBmodal
 ]
 
 export class ComponentRegister {
