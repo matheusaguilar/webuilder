@@ -1,7 +1,7 @@
 <template>
-    <div class="mdc-card-container">
+    <div class="mdc-card-container" :id="id">
         <!--Basic-->
-        <div class="mdc-card mdc-basic-card" :id="id" v-if="variant == 'basic'">
+        <div class="mdc-card mdc-basic-card" v-if="variant == 'basic'">
             <div class="mdc-card__primary-action">
                 <div class="mdc-card__media mdc-card__media--16-9 mdc-card-bgimg"></div>
                 <div class="mdc-card__primary" v-if="title || subtitle">
@@ -19,7 +19,7 @@
         </div>
 
         <!--Text Over Media-->
-        <div class="mdc-card mdc-basic-overmedia" :id="id" v-if="variant == 'basic-overmedia'">
+        <div class="mdc-card mdc-basic-overmedia" v-if="variant == 'basic-overmedia'">
             <div class="mdc-card__primary-action">
                 <div class="mdc-card__media mdc-card__media--16-9 mdc-card-bgimg">
                     <div class="mdc-card__media-content mdc-overmedia-card__media-content">

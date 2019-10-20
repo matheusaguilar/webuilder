@@ -245,7 +245,7 @@ export default class AppLayout extends Vue {
     let ele = element;
 
     while(!ele.dataset.compname && !ele.id){
-      styleClass.push(ele.className? '.' + ele.className : ele.nodeName);
+      styleClass.push(ele.className? '.' + ele.className.split(' ')[0] : ele.nodeName);
       ele = ele.parentNode;
     }
     styleClass.push(ele.id? '#' + ele.id : '#' + ele.dataset.compname);
