@@ -1,12 +1,12 @@
 <template>
-    <WBdataTable>
-        <WBdataTableHead>
-          <div class="wbuilder-insert"></div>
-        </WBdataTableHead>
-        <WBdataTableBody>
-          <div class="wbuilder-insert"></div>
-        </WBdataTableBody>
-    </WBdataTable>
+  <WBdataTable>
+      <WBdataTableHead>
+        <div class="wbuilder-insert"></div>
+      </WBdataTableHead>
+      <WBdataTableBody>
+        <div class="wbuilder-insert"></div>
+      </WBdataTableBody>
+  </WBdataTable>
 </template>
 
 <script>
