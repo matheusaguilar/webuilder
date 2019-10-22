@@ -18,7 +18,8 @@ export default {
     return {
         variant__Options: [
             'filled',
-            'outlined'
+            'outlined',
+            'full-width'
         ],
     }
   },
