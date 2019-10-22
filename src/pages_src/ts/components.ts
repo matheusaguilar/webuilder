@@ -11,6 +11,9 @@ import WBdataTable from '_Components/wrapper/WBdataTable.vue';
 import WBdataTableRow from '_Components/wrapper/WBdataTableRow.vue';
 import WBdataTableColumn from '_Components/wrapper/WBdataTableColumn.vue';
 import WBmodal from '_Components/wrapper/WBmodal.vue';
+import WBcheckbox from '_Components/wrapper/WBcheckbox.vue';
+import WBradioButton from '_Components/wrapper/WBradioButton.vue';
+import WBtextfield from '_Components/wrapper/WBtextfield.vue';
 
 const ComponentArray = [
     WBtopAppBar,
@@ -25,7 +28,10 @@ const ComponentArray = [
     WBdataTable,
     WBdataTableRow,
     WBdataTableColumn,
-    WBmodal
+    WBmodal,
+    WBcheckbox,
+    WBradioButton,
+    WBtextfield
 ]
 
 export class ComponentRegister {
