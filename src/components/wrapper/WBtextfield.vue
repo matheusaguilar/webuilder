@@ -1,5 +1,6 @@
 <template>
-  <WBtextfield :variant="variant__Options[variant]" :label="label"></WBtextfield>
+  <WBtextfield :variant="variant__Options[variant]" :label="label" :shaped="shaped__Check"
+    :left-icon="leftIcon" :right-icon="rightIcon" :helper-text="helperText" :counter="counter"></WBtextfield>
 </template>
 
 <script>
@@ -12,7 +13,12 @@ export default {
   },
   props: {
     variant: { default: 0 },
-    label: { default: 'Textfield Label' }
+    label: { default: 'Textfield Label' },
+    shaped: { default: false },
+    leftIcon: { default: '' },
+    rightIcon: { default: '' },
+    helperText: { default: '' },
+    counter: { default: '' }
   },
   data(){
     return {
@@ -21,6 +27,7 @@ export default {
             'outlined',
             'full-width'
         ],
+        shaped__Check: false
     }
   },
   methods: {
@@ -28,8 +35,17 @@ export default {
       return ['WBtextfield'];
     },
     wbGetHTML(elem){
-      return WrapperUtil.getInstance().getTag(this.wbGetTag(), null, elem, true);
+      return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
+        [`variant="${this.variant__Options[this.variant]}" label="${this.label}"
+          shaped="${this.shaped__Check}" left-icon="${this.leftIcon}" right-icon="${this.rightIcon}" 
+          helper-text="${this.helperText}" counter="${this.counter}"`], elem, true);
     }
   }
 };
 </script>
+
+<style lang="scss">
+.mdc-text-field-helper-text {
+  opacity: 1;
+}
+</style>

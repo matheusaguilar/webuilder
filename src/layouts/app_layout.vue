@@ -5,7 +5,7 @@
       <div class="mdc-top-app-bar__row">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <a href="#" class="mdc-icon-button material-icons mdc-top-app-bar__navigation-icon">menu</a>
-          <span class="mdc-top-app-bar__title">WBuilder</span>
+          <span class="mdc-top-app-bar__title">WeBuilder</span>
         </section>
 
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
