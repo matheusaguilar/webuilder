@@ -1,4 +1,4 @@
-const TITLE_PAGES = 'WBuilder';
+const TITLE_PAGES = 'WeBuilder';
 
 const DEFAULT_LAYOUT_PAGES = 'app_layout.vue';
 

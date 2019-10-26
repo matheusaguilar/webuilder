@@ -14,6 +14,9 @@ import WBmodal from '_Components/wrapper/WBmodal.vue';
 import WBcheckbox from '_Components/wrapper/WBcheckbox.vue';
 import WBradioButton from '_Components/wrapper/WBradioButton.vue';
 import WBtextfield from '_Components/wrapper/WBtextfield.vue';
+import WBselect from '_Components/wrapper/WBselect.vue';
+import WBlist from '_Components/wrapper/WBlist.vue';
+import WBlistItem from '_Components/wrapper/WBlistItem.vue';
 
 const ComponentArray = [
     WBtopAppBar,
@@ -31,7 +34,10 @@ const ComponentArray = [
     WBmodal,
     WBcheckbox,
     WBradioButton,
-    WBtextfield
+    WBtextfield,
+    WBselect,
+    WBlist,
+    WBlistItem
 ]
 
 export class ComponentRegister {

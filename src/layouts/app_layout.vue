@@ -67,12 +67,22 @@
             </div>
 
             <!--DeviceLook-->
-            <div id="device-look" class="device-look" :style="{'max-width': device }"
-              v-on:drop="dropComponent($event)" v-on:dragover="allowDropComponent($event)">
+            <div
+              id="device-look"
+              class="device-look"
+              :style="{'max-width': device }"
+              v-on:drop="dropComponent($event)"
+              v-on:dragover="allowDropComponent($event)"
+            >
               <div class="device-root">Root</div>
 
-              <iframe id="deviceFrame" width="100%" height="564" frameborder="0"
-                v-on:dragover="allowDropComponent($event)"></iframe>
+              <iframe
+                id="deviceFrame"
+                width="100%"
+                height="564"
+                frameborder="0"
+                v-on:dragover="allowDropComponent($event)"
+              ></iframe>
             </div>
           </div>
 
@@ -84,23 +94,44 @@
               </button>
             </div>
             <div class="props-container" v-show="showProps">
-              <CompProps :component="this.elementSelected" @changeprop="changeProp"/>
+              <CompProps :component="this.elementSelected" @changeprop="changeProp" />
             </div>
           </div>
         </div>
       </main>
     </div>
+
+    <!-- Dialog-->
+    <div id="app-dialog" class="mdc-dialog" role="alertdialog"
+      aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <h2 class="mdc-dialog__title" id="my-dialog-title">Code Generated</h2>
+          <div class="mdc-dialog__content" id="my-dialog-content">{{codeGenerated}}</div>
+          <footer class="mdc-dialog__actions">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+              <span class="mdc-button__label">Close</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop } from "vue-property-decorator";
 import { MDCTopAppBar } from "@material/top-app-bar";
 import { MDCDrawer } from "@material/drawer";
+import { MDCDialog } from "@material/dialog";
 import CompTree from "_Components/wbuilder/compTree.vue";
 import CompProps from "_Components/wbuilder/compProps.vue";
 
-import { ComponentRegister, ComponentsLoader } from "./../pages_src/ts/components";
+import {
+  ComponentRegister,
+  ComponentsLoader
+} from "./../pages_src/ts/components";
 import { KeyBoardEvents } from "./../pages_src/ts/keyboard";
 import { DeviceLook } from "./../pages_src/ts/deviceLook";
 
@@ -113,8 +144,15 @@ class CompElement {
   public children: Array<CompElement> = [];
   public comp: ComponentRegister;
   public slot: number;
-  
-  constructor(name: string, element: Element, instance: Object, children: Array<CompElement>, comp: ComponentRegister, slot: number){
+
+  constructor(
+    name: string,
+    element: Element,
+    instance: Object,
+    children: Array<CompElement>,
+    comp: ComponentRegister,
+    slot: number
+  ) {
     this.name = name;
     this.element = element;
     this.instance = instance;
@@ -125,15 +163,17 @@ class CompElement {
 }
 
 @Component({
-  components: {  
+  components: {
     CompTree,
-    CompProps 
+    CompProps
   }
 })
 export default class AppLayout extends Vue {
   device: string = "desktop";
-  topAppBar: any =  null; //topAppBar
-  drawer: any =  null; //Drawer
+  topAppBar: any = null; //topAppBar
+  drawer: any = null; //Drawer
+  dialog: any = null; //Dialog
+  codeGenerated: any = null; //Code generated after click on download button.
   showProps = false; //show-hide props menu
   keyBoardEvents: any = null; //control keyboard events.
   deviceLook: any = null; //control changes in device look.
@@ -157,16 +197,19 @@ export default class AppLayout extends Vue {
     //MDC Components
     const drawerElement = document.getElementById("app-drawer");
     const topAppBarElement = document.getElementById("app-bar");
+    const dialogElement = document.getElementById("app-dialog");
 
-    if (!!drawerElement && topAppBarElement){
+    if (drawerElement && topAppBarElement && dialogElement) {
       this.drawer = MDCDrawer.attachTo(drawerElement);
       this.topAppBar = MDCTopAppBar.attachTo(topAppBarElement);
+      this.dialog = new MDCDialog(dialogElement);
+
       this.topAppBar.setScrollTarget(document.getElementById("main-content"));
       this.topAppBar.listen("MDCTopAppBar:nav", () => {
         this.drawer.open = !this.drawer.open;
       });
     }
-  
+
     // Device Look
     this.deviceLook = new DeviceLook();
     this.device = this.deviceLook.swithDeviceLook("desktop");
@@ -175,12 +218,16 @@ export default class AppLayout extends Vue {
     this.keyBoardEvents = new KeyBoardEvents(document);
     this.keyBoardEvents.delete(this.deleteElemOfDeviceLook);
     this.keyBoardEvents.arrowLeft(() => {
-      this.device = this.deviceLook.prev(this.deviceLook.getDeviceSelected(this.device));
+      this.device = this.deviceLook.prev(
+        this.deviceLook.getDeviceSelected(this.device)
+      );
     });
     this.keyBoardEvents.arrowRight(() => {
-      this.device = this.deviceLook.next(this.deviceLook.getDeviceSelected(this.device));
+      this.device = this.deviceLook.next(
+        this.deviceLook.getDeviceSelected(this.device)
+      );
     });
-    
+
     // iframe
     this.initIframe();
   }
@@ -188,117 +235,126 @@ export default class AppLayout extends Vue {
   /**
    * generate the code needed to create the web page.
    */
-  downloadComponents(){
-    let html = '';
-    
-    html += '<template>\n<div>';
+  downloadComponents() {
+    let html = "";
+
+    html += "<template>\n<div>";
     // get the html of components
-    for(const elem of this.deviceElements){
+    for (const elem of this.deviceElements) {
       html += (<any>elem.instance).wbGetHTML(elem);
     }
-    html += '\n</div>\n</template>';
+    html += "\n</div>\n</template>";
 
     // get script imports
     let importTags: any = [];
     let compNames = {};
 
     html += '\n\n<script lang="ts">\n';
-    html += 'import { Vue, Component, Prop } from \'vue-property-decorator\';';
+    html += "import { Vue, Component, Prop } from 'vue-property-decorator';";
     // get imports of components
-    for(const elem of this.deviceElements){
-      importTags = importTags.concat(WrapperUtil.getInstance().getImportTags(elem));
+    for (const elem of this.deviceElements) {
+      importTags = importTags.concat(
+        WrapperUtil.getInstance().getImportTags(elem)
+      );
     }
-    importTags = importTags.filter((v: any, i: any) => importTags.indexOf(v) === i);
-    for(const tag of importTags){
-        html += '\nimport ' + tag + ' from \'path/' + tag + '.vue\';';
+    importTags = importTags.filter(
+      (v: any, i: any) => importTags.indexOf(v) === i
+    );
+    for (const tag of importTags) {
+      html += "\nimport " + tag + " from 'path/" + tag + ".vue';";
     }
     //component vue
-    html += '\n\n@Component({\ncomponents: {';
-    for(let i=0; i<importTags.length; i++){
-      html += '\n' + importTags[i];
-      if (i != importTags.length - 1){
-        html += ','
+    html += "\n\n@Component({\ncomponents: {";
+    for (let i = 0; i < importTags.length; i++) {
+      html += "\n" + importTags[i];
+      if (i != importTags.length - 1) {
+        html += ",";
       }
     }
-    html += '\n}\n})';
-    html += '\nexport default class MyClass extends Vue {\n\n}';
-    html += '\n<' + '/script>';
+    html += "\n}\n})";
+    html += "\nexport default class MyClass extends Vue {\n\n}";
+    html += "\n<" + "/script>";
 
     // get the style class of components
     html += '\n\n<style lang="scss">';
     const iframeDeviceLook = this.getFrameDeviceLook();
-    if (iframeDeviceLook){
-      const styleElements = iframeDeviceLook.querySelectorAll('[style]');
-      styleElements.forEach((elem) => {
-        if ((<HTMLElement>elem).style.cssText){
-          html += '\n' + this.getStyleComp(elem);
+    if (iframeDeviceLook) {
+      const styleElements = iframeDeviceLook.querySelectorAll("[style]");
+      styleElements.forEach(elem => {
+        if ((<HTMLElement>elem).style.cssText) {
+          html += "\n" + this.getStyleComp(elem);
         }
       });
     }
-    html += '\n</style>';
+    html += "\n</style>";
 
-    console.log(html);
+    this.codeGenerated = html;
+    if (this.dialog && !this.dialog.isOpen) {
+      this.dialog.open();
+    }
   }
 
-  getStyleComp(element: any){
+  getStyleComp(element: any) {
     let styleClass = [];
     let ele = element;
 
-    while(!ele.dataset.compname && !ele.id){
-      styleClass.push(ele.className? '.' + ele.className.split(' ')[0] : ele.nodeName);
+    while (!ele.dataset.compname && !ele.id) {
+      styleClass.push(
+        ele.className ? "." + ele.className.split(" ")[0] : ele.nodeName
+      );
       ele = ele.parentNode;
     }
-    styleClass.push(ele.id? '#' + ele.id : '#' + ele.dataset.compname);
+    styleClass.push(ele.id ? "#" + ele.id : "#" + ele.dataset.compname);
 
-    let buildClass = '';
-    for(let i=styleClass.length - 1; i>=0; i--){
-      if (i != styleClass.length - 1){
-        buildClass+= ' ';
+    let buildClass = "";
+    for (let i = styleClass.length - 1; i >= 0; i--) {
+      if (i != styleClass.length - 1) {
+        buildClass += " ";
       }
       buildClass += styleClass[i];
     }
 
-    return  buildClass += ` {\n ${element.style.cssText} \n}`
+    return (buildClass += ` {\n ${element.style.cssText} \n}`);
   }
 
   /**
    * init iframe.
    */
-  initIframe(){
+  initIframe() {
     const iframeDocument = this.getIframeDocument();
-    if (iframeDocument){
+    if (iframeDocument) {
       iframeDocument.open();
-      iframeDocument.write('<body></body>');
+      iframeDocument.write("<body></body>");
 
       //meta
-      var meta = document.createElement('meta');
+      var meta = document.createElement("meta");
       meta.name = "viewport";
       meta.content = "width=device-width, initial-scale=1.0";
       iframeDocument.head.appendChild(meta);
 
       //fonts
       var fonts = document.querySelectorAll('link[as="font"]');
-      for (var i=0; i<fonts.length; i++){
+      for (var i = 0; i < fonts.length; i++) {
         iframeDocument.head.appendChild(fonts[i].cloneNode(true));
       }
 
       //stylesheets
       var styles = document.querySelectorAll('link[rel="stylesheet"]');
-      for (var i=0; i<styles.length; i++){
+      for (var i = 0; i < styles.length; i++) {
         iframeDocument.head.appendChild(styles[i].cloneNode(true));
       }
 
       //styles
-      var stylesElements = document.getElementsByTagName('style');
-      for (var i=0; i<stylesElements.length; i++){
+      var stylesElements = document.getElementsByTagName("style");
+      for (var i = 0; i < stylesElements.length; i++) {
         iframeDocument.head.appendChild(stylesElements[i].cloneNode(true));
       }
 
-      iframeDocument.body.style.margin = '0px';
-      iframeDocument.body.style.display = 'block';
-      iframeDocument.body.style.backgroundColor = 'white';
-      iframeDocument.body.style.height = 'initial';
-      iframeDocument.body.style.overflowX = 'hidden';
+      iframeDocument.body.style.margin = "0px";
+      iframeDocument.body.style.display = "block";
+      iframeDocument.body.style.backgroundColor = "white";
+      iframeDocument.body.style.height = "initial";
+      iframeDocument.body.style.overflowX = "hidden";
       iframeDocument.close();
     }
   }
@@ -306,9 +362,9 @@ export default class AppLayout extends Vue {
   /**
    * get the iframe document.
    */
-  getIframeDocument(){
-    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
-    if (!!iframe && !!iframe.contentWindow){
+  getIframeDocument() {
+    const iframe = <HTMLIFrameElement>document.getElementById("deviceFrame");
+    if (!!iframe && !!iframe.contentWindow) {
       return iframe.contentWindow.document;
     }
   }
@@ -316,27 +372,27 @@ export default class AppLayout extends Vue {
   /**
    * get the device-look id inside iframe.
    */
-  getFrameDeviceLook(){
-    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
-    if (!!iframe && !!iframe.contentWindow){
+  getFrameDeviceLook() {
+    const iframe = <HTMLIFrameElement>document.getElementById("deviceFrame");
+    if (!!iframe && !!iframe.contentWindow) {
       return iframe.contentWindow.document.body;
     }
     return null;
   }
 
   /**
-    * onDragStart set the data to be transfered.
-    * @param event the drag event.
-    */
+   * onDragStart set the data to be transfered.
+   * @param event the drag event.
+   */
   dragComponent(event: any) {
     event.dataTransfer.setData("text", event.target.name);
     event.dataTransfer.setDragImage(document.createElement("img"), 0, 0);
   }
 
   /**
-    * allow drop on component.
-    * @param event the event to prevent.
-    */
+   * allow drop on component.
+   * @param event the event to prevent.
+   */
   allowDropComponent(event: Event) {
     event.preventDefault();
   }
@@ -379,7 +435,7 @@ export default class AppLayout extends Vue {
     instance.$el.addEventListener("drop", (event: any) => {
       event.preventDefault();
       event.stopPropagation();
-      this.addElementChild({ event: event, element: instance.$el});
+      this.addElementChild({ event: event, element: instance.$el });
     });
 
     instance.$el.addEventListener("click", (event: any) => {
@@ -393,16 +449,16 @@ export default class AppLayout extends Vue {
       instance: instance,
       children: [],
       comp: comp,
-      slot: !!slot? slot : 0
+      slot: !!slot ? slot : 0
     };
   }
 
   /**
    * when a property change, hover the new element
    */
-  changeProp(event: any){
+  changeProp(event: any) {
     window.setTimeout(() => {
-      event.className+= ' wbcomp-active';
+      event.className += " wbcomp-active";
     }, 100);
   }
 
@@ -419,14 +475,21 @@ export default class AppLayout extends Vue {
       const instance = new comp.value();
       instance.$mount();
 
-      if (elem.instance.__wbInsertSlot !== undefined){
-        this.elementSelected = this.createCompContainer(instance, name, comp, elem.instance.__wbInsertSlot);
-      } else{
-        this.elementSelected = this.createCompContainer(instance, name, comp);
+      let elementInstance = null;
+      if (elem.instance.__wbInsertSlot !== undefined) {
+        elementInstance = this.createCompContainer(
+          instance,
+          name,
+          comp,
+          elem.instance.__wbInsertSlot
+        );
+      } else {
+        elementInstance = this.createCompContainer(instance, name, comp);
       }
 
-      const inserted = this.insertHtmlWBuilder(elem, this.elementSelected.element);
-      if (inserted){
+      const inserted = this.insertHtmlWBuilder(elem, elementInstance.element);
+      if (inserted) {
+        this.elementSelected = elementInstance;
         elem.children.push(this.elementSelected);
       }
     }
@@ -437,9 +500,9 @@ export default class AppLayout extends Vue {
    */
   removeCompActiveClass() {
     const iframeDoc = this.getIframeDocument();
-    if (iframeDoc){
+    if (iframeDoc) {
       const activeElement = iframeDoc.querySelectorAll(".wbcomp-active");
-      activeElement.forEach((elem) => {
+      activeElement.forEach(elem => {
         elem.className = elem.className.replace(/ wbcomp-active/g, "");
       });
     }
@@ -449,7 +512,7 @@ export default class AppLayout extends Vue {
    * get a component in data.components by name.
    * @param name the name to look for.
    */
-  getComponentByName(name: any) : ComponentRegister | null{
+  getComponentByName(name: any): ComponentRegister | null {
     for (const comp of this.components) {
       if (comp.name == name) {
         return comp;
@@ -512,7 +575,7 @@ export default class AppLayout extends Vue {
    */
   addElemToDeviceLook(obj: any) {
     const elem = this.getFrameDeviceLook();
-    if (elem){
+    if (elem) {
       elem.appendChild(obj.element);
       this.deviceElements.push(obj);
     }
@@ -553,7 +616,7 @@ export default class AppLayout extends Vue {
    * @param elemArray the array to look.
    * @param elemSearch the element to search for.
    */
-  deleteElemOfDeviceLookRecursive(elemArray: any, elemSearch: any): any{
+  deleteElemOfDeviceLookRecursive(elemArray: any, elemSearch: any): any {
     var searched = false;
 
     for (var i = 0; i < elemArray.length; i++) {
@@ -587,8 +650,8 @@ export default class AppLayout extends Vue {
     const nodes = elem.element.querySelectorAll(".wbuilder-insert");
     if (nodes.length > 0) {
       let parent = null;
-      if (elem.instance.__wbInsertSlot !== undefined){
-        if (elem.instance.__wbInsertSlot <= nodes.length){
+      if (elem.instance.__wbInsertSlot !== undefined) {
+        if (elem.instance.__wbInsertSlot <= nodes.length) {
           parent = nodes[elem.instance.__wbInsertSlot].parentNode;
         } else {
           return false;
@@ -601,7 +664,6 @@ export default class AppLayout extends Vue {
     }
     return false;
   }
-
 }
 </script>
 
@@ -624,15 +686,16 @@ body {
     z-index: 7;
   }
 
-  .mdc-drawer__content{
+  .mdc-drawer__content {
     overflow-y: hidden;
   }
 
   //Drawer
-  .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing)+.mdc-drawer-app-content{
+  .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing)
+    + .mdc-drawer-app-content {
     margin-left: 300px;
   }
-  
+
   .mdc-drawer {
     width: 300px;
 
@@ -651,11 +714,11 @@ body {
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    .comps{
+    .comps {
       max-height: 280px;
     }
 
-    .comp-tree{
+    .comp-tree {
       max-height: 280px;
 
       .active {
@@ -710,25 +773,24 @@ body {
             max-width: 1280px;
             height: 600px;
 
-              .device-root {
-                height: 50px;
-                padding: 16px;
-                box-sizing: border-box;
-                text-align: center;
-                text-transform: uppercase;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.54);
-              }
+            .device-root {
+              height: 50px;
+              padding: 16px;
+              box-sizing: border-box;
+              text-align: center;
+              text-transform: uppercase;
+              border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+            }
           }
-
         }
 
         .props {
-          .props-title{
+          .props-title {
             padding: 2px 8px;
             text-align: right;
           }
-          
-          .props-container{
+
+          .props-container {
             min-width: 200px;
             max-width: 300px;
             min-height: 400px;
@@ -750,7 +812,7 @@ body {
   border: 1px solid $selected;
 }
 
-.wbcursor{
+.wbcursor {
   cursor: pointer;
 }
 </style>
