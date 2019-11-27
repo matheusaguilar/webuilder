@@ -18,58 +18,58 @@ import WBselect from '_Components/wrapper/WBselect.vue';
 import WBlist from '_Components/wrapper/WBlist.vue';
 import WBlistItem from '_Components/wrapper/WBlistItem.vue';
 
-const ComponentArray = [
-    WBtopAppBar,
-    WBlayoutGrid,
-    WBlayoutGridCell,
-    WBbutton,
-    WBbuttonFAB,
-    WBbuttonIcon,
-    WBchipContainer,
-    WBchip,
-    WBcard,
-    WBdataTable,
-    WBdataTableRow,
-    WBdataTableColumn,
-    WBmodal,
-    WBcheckbox,
-    WBradioButton,
-    WBtextfield,
-    WBselect,
-    WBlist,
-    WBlistItem
+const componentArray = [
+  WBtopAppBar,
+  WBlayoutGrid,
+  WBlayoutGridCell,
+  WBbutton,
+  WBbuttonFAB,
+  WBbuttonIcon,
+  WBchipContainer,
+  WBchip,
+  WBcard,
+  WBdataTable,
+  WBdataTableRow,
+  WBdataTableColumn,
+  WBmodal,
+  WBcheckbox,
+  WBradioButton,
+  WBtextfield,
+  WBselect,
+  WBlist,
+  WBlistItem
 ]
 
 export class ComponentRegister {
-    public name: string;
-    public value: any;
+  public name: string;
+  public value: any;
 
-    constructor(name: string, value: any) {
-        this.name = name;
-        this.value = value;
-    }
+  constructor(name: string, value: any) {
+    this.name = name;
+    this.value = value;
+  }
 }
 
-function getCompName(comp: any): ComponentRegister{
-    var nameArray = comp.__file.split('/');
-    var name = nameArray[nameArray.length - 1].split('.')[0];
+function getCompName(comp: any): ComponentRegister {
+  const nameArray = comp.__file.split('/');
+  const name = nameArray[nameArray.length - 1].split('.')[0];
 
-    return new ComponentRegister(name, comp);
+  return new ComponentRegister(name, comp);
 }
 
 export class ComponentsLoader {
 
-    private _items: Array<ComponentRegister>;
+  private _items: ComponentRegister[];
 
-    constructor() {
-        this._items = [];
-        for (const comp of ComponentArray) {
-            this._items.push(getCompName(comp));
-        }
+  constructor() {
+    this._items = [];
+    for (const comp of componentArray) {
+      this._items.push(getCompName(comp));
     }
+  }
 
-    get items(): Array<ComponentRegister> {
-        return this._items;
-    }
+  get items(): ComponentRegister[] {
+    return this._items;
+  }
 
 }

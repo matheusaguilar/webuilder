@@ -300,8 +300,6 @@ function createHTMLtxt(obj, path){
       script = objMeta.script;
     }
   }
-
-  var exportModeScript = obj.mode == 'development'? '<script>window.webpackMode = \'development\';</script>' : '';
   
   var txt = '';
   txt+= '<!DOCTYPE html><html><head>' +
@@ -309,9 +307,8 @@ function createHTMLtxt(obj, path){
   getMetas(meta) +
   getCSS(css) +
   '</head><body><div id="app"></div>' +
-  '<div id="replace"></div>' +
+  // '<div id="replace"></div>' +
   getScripts(script) +
-  exportModeScript +
   '<script src="./' + replacePath(path) + 'index_bundle.js"></script>' +
   '</body></html>'
 

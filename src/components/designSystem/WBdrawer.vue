@@ -7,8 +7,18 @@
 </template>
 
 <script>
+import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+
 export default {
   props: ['topappbar'],
+  data: function(){
+    return {
+      element: null
+    }
+  },
+  mounted(){
+    this.element = Builder.getInstance().init('WBdrawer');
+  },
   computed: {
     paddingTop: function(){
       return this.topappbar == 'dense'? 'padding-dense' : 'padding-standard';
@@ -43,5 +53,21 @@ body {
 
 .padding-dense{
   padding-top: 48px;
+}
+
+#wbMDCTopAppBarMenuBtn{
+  display: none;
+}
+
+@media screen and (max-width: 1024px){
+  #wbMDCTopAppBarMenuBtn{
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1024px){
+  #wbMDCDrawer {
+    display: none;
+  }
 }
 </style>

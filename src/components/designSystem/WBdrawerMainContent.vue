@@ -7,8 +7,18 @@
 </template>
 
 <script>
+import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+
 export default {
   props: ['topappbar'],
+  data: function(){
+    return {
+      element: null
+    }
+  },
+  mounted(){
+    this.element = Builder.getInstance().init('WBdrawerMainContent');
+  },
   computed: {
     paddingTop: function(){
       return this.topappbar == 'dense'? 'padding-dense' : 'padding-standard';

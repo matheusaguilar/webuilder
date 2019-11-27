@@ -132,10 +132,20 @@
 </template>
 
 <script>
+import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+
 export default {
   props: {
     variant: { default: "standard" },
     title: { default: "Title" }
+  },
+  data: function(){
+    return {
+      element: null
+    }
+  },
+  mounted(){
+    this.element = Builder.getInstance().init('WBtopAppBar');
   }
 };
 </script>

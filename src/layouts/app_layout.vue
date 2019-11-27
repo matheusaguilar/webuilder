@@ -104,10 +104,13 @@
     <!-- Dialog-->
     <div id="app-dialog" class="mdc-dialog" role="alertdialog"
       aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
-      <div class="mdc-dialog__container">
-        <div class="mdc-dialog__surface">
+      <div class="mdc-dialog__container" style="width: 100%; max-width: 1000px">
+        <div class="mdc-dialog__surface" style="width: 100%; max-width: 1000px">
           <h2 class="mdc-dialog__title" id="my-dialog-title">Code Generated</h2>
-          <div class="mdc-dialog__content" id="my-dialog-content">{{codeGenerated}}</div>
+          <div class="mdc-dialog__content" id="my-dialog-content">
+            <pre class="language-markup"><code class="language-markup" id="code-download"></code></pre>
+            <!-- {{codeGenerated}} -->
+          </div>
           <footer class="mdc-dialog__actions">
             <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
               <span class="mdc-button__label">Close</span>
@@ -121,27 +124,27 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { MDCTopAppBar } from "@material/top-app-bar";
-import { MDCDrawer } from "@material/drawer";
-import { MDCDialog } from "@material/dialog";
-import CompTree from "_Components/wbuilder/compTree.vue";
-import CompProps from "_Components/wbuilder/compProps.vue";
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { MDCTopAppBar } from '@material/top-app-bar';
+import { MDCDrawer } from '@material/drawer';
+import { MDCDialog } from '@material/dialog';
+import CompTree from '_Components/wbuilder/compTree.vue';
+import CompProps from '_Components/wbuilder/compProps.vue';
 
 import {
   ComponentRegister,
-  ComponentsLoader
-} from "./../pages_src/ts/components";
-import { KeyBoardEvents } from "./../pages_src/ts/keyboard";
-import { DeviceLook } from "./../pages_src/ts/deviceLook";
+  ComponentsLoader,
+} from './../pages_src/ts/components';
+import { KeyBoardEvents } from './../pages_src/ts/keyboard';
+import { DeviceLook } from './../pages_src/ts/deviceLook';
 
-import { WrapperUtil } from "./../pages_src/ts/wrapperUtil";
+import { WrapperUtil } from './../pages_src/ts/wrapperUtil';
 
 class CompElement {
   public name: string;
   public element: Element;
   public instance: Object;
-  public children: Array<CompElement> = [];
+  public children: CompElement[] = [];
   public comp: ComponentRegister;
   public slot: number;
 
@@ -149,7 +152,7 @@ class CompElement {
     name: string,
     element: Element,
     instance: Object,
-    children: Array<CompElement>,
+    children: CompElement[],
     comp: ComponentRegister,
     slot: number
   ) {
@@ -169,21 +172,21 @@ class CompElement {
   }
 })
 export default class AppLayout extends Vue {
-  device: string = "desktop";
-  topAppBar: any = null; //topAppBar
-  drawer: any = null; //Drawer
-  dialog: any = null; //Dialog
-  codeGenerated: any = null; //Code generated after click on download button.
-  showProps = false; //show-hide props menu
-  keyBoardEvents: any = null; //control keyboard events.
-  deviceLook: any = null; //control changes in device look.
-  nameUniqueIndex = 0; //variable to create unique index names on components.
-  components: Array<ComponentRegister> = []; //components registereds.
-  deviceElements: Array<CompElement> = []; //elements inserted in device look.
-  elementSelected: any = null; //actual element selected.
+  device: string = 'desktop';
+  topAppBar: any = null; // topAppBar
+  drawer: any = null; // Drawer
+  dialog: any = null; // Dialog
+  codeGenerated: any = null; // Code generated after click on download button.
+  showProps = false; // show-hide props menu
+  keyBoardEvents: any = null; // control keyboard events.
+  deviceLook: any = null; // control changes in device look.
+  nameUniqueIndex = 0; // variable to create unique index names on components.
+  components: ComponentRegister[] = []; // components registereds.
+  deviceElements: CompElement[] = []; // elements inserted in device look.
+  elementSelected: any = null; // actual element selected.
 
   created() {
-    //load components
+    // load components
     const c = new ComponentsLoader();
     for (const comp of c.items) {
       this.components.push({
@@ -194,25 +197,25 @@ export default class AppLayout extends Vue {
   }
 
   mounted() {
-    //MDC Components
-    const drawerElement = document.getElementById("app-drawer");
-    const topAppBarElement = document.getElementById("app-bar");
-    const dialogElement = document.getElementById("app-dialog");
+    // MDC Components
+    const drawerElement = document.getElementById('app-drawer');
+    const topAppBarElement = document.getElementById('app-bar');
+    const dialogElement = document.getElementById('app-dialog');
 
     if (drawerElement && topAppBarElement && dialogElement) {
       this.drawer = MDCDrawer.attachTo(drawerElement);
       this.topAppBar = MDCTopAppBar.attachTo(topAppBarElement);
       this.dialog = new MDCDialog(dialogElement);
 
-      this.topAppBar.setScrollTarget(document.getElementById("main-content"));
-      this.topAppBar.listen("MDCTopAppBar:nav", () => {
+      this.topAppBar.setScrollTarget(document.getElementById('main-content'));
+      this.topAppBar.listen('MDCTopAppBar:nav', () => {
         this.drawer.open = !this.drawer.open;
       });
     }
 
     // Device Look
     this.deviceLook = new DeviceLook();
-    this.device = this.deviceLook.swithDeviceLook("desktop");
+    this.device = this.deviceLook.swithDeviceLook('desktop');
 
     // KeyBoard events
     this.keyBoardEvents = new KeyBoardEvents(document);
@@ -236,20 +239,22 @@ export default class AppLayout extends Vue {
    * generate the code needed to create the web page.
    */
   downloadComponents() {
-    let html = "";
+    let html = '';
+    const script = 'script';
+    const style = 'style';
 
-    html += "<template>\n<div>";
+    html += '<template>\n<div>';
     // get the html of components
     for (const elem of this.deviceElements) {
       html += (<any>elem.instance).wbGetHTML(elem);
     }
-    html += "\n</div>\n</template>";
+    html += '\n</div>\n</template>';
 
     // get script imports
     let importTags: any = [];
-    let compNames = {};
+    const compNames = {};
 
-    html += '\n\n<script lang="ts">\n';
+    html += `\n\n<${script} lang="ts">\n`;
     html += "import { Vue, Component, Prop } from 'vue-property-decorator';";
     // get imports of components
     for (const elem of this.deviceElements) {
@@ -261,55 +266,63 @@ export default class AppLayout extends Vue {
       (v: any, i: any) => importTags.indexOf(v) === i
     );
     for (const tag of importTags) {
-      html += "\nimport " + tag + " from 'path/" + tag + ".vue';";
+      html += `\nimport ${tag} from 'path/${tag}.vue';`;
     }
-    //component vue
-    html += "\n\n@Component({\ncomponents: {";
+    // component vue
+    html += '\n\n@Component({\ncomponents: {';
     for (let i = 0; i < importTags.length; i++) {
-      html += "\n" + importTags[i];
-      if (i != importTags.length - 1) {
-        html += ",";
+      html += `\n${importTags[i]}`;
+      if (i !== importTags.length - 1) {
+        html += ',';
       }
     }
-    html += "\n}\n})";
-    html += "\nexport default class MyClass extends Vue {\n\n}";
-    html += "\n<" + "/script>";
+    html += '\n}\n})';
+    html += '\nexport default class MyClass extends Vue {\n\n}';
+    html += `\n</${script}>`;
 
     // get the style class of components
-    html += '\n\n<style lang="scss">';
+    html += `\n\n<${style} lang="scss">`;
     const iframeDeviceLook = this.getFrameDeviceLook();
     if (iframeDeviceLook) {
-      const styleElements = iframeDeviceLook.querySelectorAll("[style]");
-      styleElements.forEach(elem => {
+      const styleElements = iframeDeviceLook.querySelectorAll('[style]');
+      styleElements.forEach((elem) => {
         if ((<HTMLElement>elem).style.cssText) {
-          html += "\n" + this.getStyleComp(elem);
+          html += `\n${this.getStyleComp(elem)}`;
         }
       });
     }
-    html += "\n</style>";
+    html += `\n</${style}>`;
 
-    this.codeGenerated = html;
-    if (this.dialog && !this.dialog.isOpen) {
+    let htmlParsed = html.replace(new RegExp('<', 'g'), '&lt;');
+    htmlParsed = htmlParsed.replace(new RegExp('>', 'g'), '&gt;');
+
+    this.codeGenerated = htmlParsed;
+    const modalContent = document.getElementById('code-download');
+    if (this.dialog && !this.dialog.isOpen && modalContent && (<any>window).Prism) {
+      // Prism highlither
+      modalContent.innerHTML = this.codeGenerated;
+      (<any>window).Prism.highlightElement(modalContent);
+
       this.dialog.open();
     }
   }
 
   getStyleComp(element: any) {
-    let styleClass = [];
+    const styleClass = [];
     let ele = element;
 
     while (!ele.dataset.compname && !ele.id) {
       styleClass.push(
-        ele.className ? "." + ele.className.split(" ")[0] : ele.nodeName
+        ele.className ? `.${ele.className.split(' ')[0]}` : ele.nodeName
       );
       ele = ele.parentNode;
     }
-    styleClass.push(ele.id ? "#" + ele.id : "#" + ele.dataset.compname);
+    styleClass.push(ele.id ? `#${ele.id}` : `#${ele.dataset.compname}`);
 
-    let buildClass = "";
+    let buildClass = '';
     for (let i = styleClass.length - 1; i >= 0; i--) {
-      if (i != styleClass.length - 1) {
-        buildClass += " ";
+      if (i !== styleClass.length - 1) {
+        buildClass += ' ';
       }
       buildClass += styleClass[i];
     }
@@ -324,37 +337,37 @@ export default class AppLayout extends Vue {
     const iframeDocument = this.getIframeDocument();
     if (iframeDocument) {
       iframeDocument.open();
-      iframeDocument.write("<body></body>");
+      iframeDocument.write('<body></body>');
 
-      //meta
-      var meta = document.createElement("meta");
-      meta.name = "viewport";
-      meta.content = "width=device-width, initial-scale=1.0";
+      // meta
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0';
       iframeDocument.head.appendChild(meta);
 
-      //fonts
-      var fonts = document.querySelectorAll('link[as="font"]');
-      for (var i = 0; i < fonts.length; i++) {
+      // fonts
+      const fonts = document.querySelectorAll('link[as="font"]');
+      for (let i = 0; i < fonts.length; i++) {
         iframeDocument.head.appendChild(fonts[i].cloneNode(true));
       }
 
-      //stylesheets
-      var styles = document.querySelectorAll('link[rel="stylesheet"]');
-      for (var i = 0; i < styles.length; i++) {
+      // stylesheets
+      const styles = document.querySelectorAll('link[rel="stylesheet"]');
+      for (let i = 0; i < styles.length; i++) {
         iframeDocument.head.appendChild(styles[i].cloneNode(true));
       }
 
-      //styles
-      var stylesElements = document.getElementsByTagName("style");
-      for (var i = 0; i < stylesElements.length; i++) {
+      // styles
+      const stylesElements = document.getElementsByTagName('style');
+      for (let i = 0; i < stylesElements.length; i++) {
         iframeDocument.head.appendChild(stylesElements[i].cloneNode(true));
       }
 
-      iframeDocument.body.style.margin = "0px";
-      iframeDocument.body.style.display = "block";
-      iframeDocument.body.style.backgroundColor = "white";
-      iframeDocument.body.style.height = "initial";
-      iframeDocument.body.style.overflowX = "hidden";
+      iframeDocument.body.style.margin = '0px';
+      iframeDocument.body.style.display = 'block';
+      iframeDocument.body.style.backgroundColor = 'white';
+      iframeDocument.body.style.height = 'initial';
+      iframeDocument.body.style.overflowX = 'hidden';
       iframeDocument.close();
     }
   }
@@ -363,7 +376,7 @@ export default class AppLayout extends Vue {
    * get the iframe document.
    */
   getIframeDocument() {
-    const iframe = <HTMLIFrameElement>document.getElementById("deviceFrame");
+    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
     if (!!iframe && !!iframe.contentWindow) {
       return iframe.contentWindow.document;
     }
@@ -373,7 +386,7 @@ export default class AppLayout extends Vue {
    * get the device-look id inside iframe.
    */
   getFrameDeviceLook() {
-    const iframe = <HTMLIFrameElement>document.getElementById("deviceFrame");
+    const iframe = <HTMLIFrameElement>document.getElementById('deviceFrame');
     if (!!iframe && !!iframe.contentWindow) {
       return iframe.contentWindow.document.body;
     }
@@ -385,8 +398,8 @@ export default class AppLayout extends Vue {
    * @param event the drag event.
    */
   dragComponent(event: any) {
-    event.dataTransfer.setData("text", event.target.name);
-    event.dataTransfer.setDragImage(document.createElement("img"), 0, 0);
+    event.dataTransfer.setData('text', event.target.name);
+    event.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
   }
 
   /**
@@ -403,7 +416,7 @@ export default class AppLayout extends Vue {
    */
   dropComponent(event: any) {
     event.preventDefault();
-    const name = event.dataTransfer.getData("text");
+    const name = event.dataTransfer.getData('text');
     const comp = this.getComponentByName(name);
 
     if (comp) {
@@ -422,33 +435,33 @@ export default class AppLayout extends Vue {
   createCompContainer(instance: any, name: any, comp: any, slot?: any) {
     this.removeCompActiveClass();
 
-    const uniqueName = name + "-" + this.nameUniqueIndex;
+    const uniqueName = `${name}-${this.nameUniqueIndex}`;
     this.nameUniqueIndex++;
 
-    instance.$el.setAttribute("data-compname", uniqueName);
-    instance.$el.className += " wbcomp-active wbcursor";
+    instance.$el.setAttribute('data-compname', uniqueName);
+    instance.$el.className += ' wbcomp-active wbcursor';
 
-    instance.$el.addEventListener("dragover", (event: any) => {
+    instance.$el.addEventListener('dragover', (event: any) => {
       this.allowDropComponent(event);
     });
 
-    instance.$el.addEventListener("drop", (event: any) => {
+    instance.$el.addEventListener('drop', (event: any) => {
       event.preventDefault();
       event.stopPropagation();
-      this.addElementChild({ event: event, element: instance.$el });
+      this.addElementChild({ event, element: instance.$el });
     });
 
-    instance.$el.addEventListener("click", (event: any) => {
+    instance.$el.addEventListener('click', (event: any) => {
       event.stopPropagation();
       this.selectElement(instance.$el);
     });
 
     return {
+      instance,
+      comp,
       name: uniqueName,
       element: instance.$el,
-      instance: instance,
       children: [],
-      comp: comp,
       slot: !!slot ? slot : 0
     };
   }
@@ -458,8 +471,8 @@ export default class AppLayout extends Vue {
    */
   changeProp(event: any) {
     window.setTimeout(() => {
-      event.className += " wbcomp-active";
-    }, 100);
+      event.className += ' wbcomp-active';
+    },                100);
   }
 
   /**
@@ -467,7 +480,7 @@ export default class AppLayout extends Vue {
    * @param obj contain obj.event the event of drag and obj.element the element html.
    */
   addElementChild(obj: any) {
-    const name = obj.event.dataTransfer.getData("text");
+    const name = obj.event.dataTransfer.getData('text');
     const comp = this.getComponentByName(name);
     const elem = this.getSelectElementRecursive(obj.element);
 
@@ -501,9 +514,9 @@ export default class AppLayout extends Vue {
   removeCompActiveClass() {
     const iframeDoc = this.getIframeDocument();
     if (iframeDoc) {
-      const activeElement = iframeDoc.querySelectorAll(".wbcomp-active");
-      activeElement.forEach(elem => {
-        elem.className = elem.className.replace(/ wbcomp-active/g, "");
+      const activeElement = iframeDoc.querySelectorAll('.wbcomp-active');
+      activeElement.forEach((elem) => {
+        elem.className = elem.className.replace(/ wbcomp-active/g, '');
       });
     }
   }
@@ -514,7 +527,7 @@ export default class AppLayout extends Vue {
    */
   getComponentByName(name: any): ComponentRegister | null {
     for (const comp of this.components) {
-      if (comp.name == name) {
+      if (comp.name === name) {
         return comp;
       }
     }
@@ -527,7 +540,7 @@ export default class AppLayout extends Vue {
    */
   selectElement(elem: any) {
     this.removeCompActiveClass();
-    elem.className += " wbcomp-active";
+    elem.className += ' wbcomp-active';
 
     this.elementSelected = this.getSelectElementRecursive(elem);
   }
@@ -555,9 +568,9 @@ export default class AppLayout extends Vue {
    */
   selectElementRecursive(elem: any, elemSearch: any): any {
     let response = null;
-    if (elem.element == elemSearch) {
+    if (elem.element === elemSearch) {
       return elem;
-    } else if (elem.children.length > 0) {
+    }  if (elem.children.length > 0) {
       for (const ele of elem.children) {
         response = this.selectElementRecursive(ele, elemSearch);
         if (response) {
@@ -597,12 +610,12 @@ export default class AppLayout extends Vue {
         )
       ) {
         if (
-          oldName == this.elementSelected.name &&
+          oldName === this.elementSelected.name &&
           this.deviceElements.length > 0
         ) {
           this.elementSelected = this.deviceElements[0];
           this.selectElement(this.elementSelected.element);
-        } else if (oldName == this.elementSelected.name) {
+        } else if (oldName === this.elementSelected.name) {
           this.elementSelected = null;
         } else {
           this.selectElement(this.elementSelected.element);
@@ -617,10 +630,10 @@ export default class AppLayout extends Vue {
    * @param elemSearch the element to search for.
    */
   deleteElemOfDeviceLookRecursive(elemArray: any, elemSearch: any): any {
-    var searched = false;
+    let searched = false;
 
-    for (var i = 0; i < elemArray.length; i++) {
-      if (elemArray[i].name == elemSearch.name) {
+    for (let i = 0; i < elemArray.length; i++) {
+      if (elemArray[i].name === elemSearch.name) {
         searched = true;
         elemArray.splice(i, 1);
         if (elemArray.length > 0) {
@@ -647,7 +660,7 @@ export default class AppLayout extends Vue {
    * insert element html into WBuilder class inside another element.
    */
   insertHtmlWBuilder(elem: any, insertElem: any) {
-    const nodes = elem.element.querySelectorAll(".wbuilder-insert");
+    const nodes = elem.element.querySelectorAll('.wbuilder-insert');
     if (nodes.length > 0) {
       let parent = null;
       if (elem.instance.__wbInsertSlot !== undefined) {
@@ -740,6 +753,7 @@ body {
 
       .main-divider {
         display: flex;
+        overflow: hidden;
 
         .device {
           width: 100%;

@@ -1,7 +1,7 @@
 {
-  "name": "projeto",
+  "name": "webuilder",
   "version": "1.0.0",
-  "description": "WeBuilder",
+  "description": "webuilder",
   "private": true,
   "scripts": {
     "build": "webpack --mode=production",
@@ -16,6 +16,8 @@
     "reflect-metadata": "^0.1.13",
     "sass-loader": "^7.1.0",
     "ts-loader": "^6.1.0",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
     "typescript": "^3.6.3",
     "vue": "^2.6.6",
     "vue-loader": "^15.6.2",

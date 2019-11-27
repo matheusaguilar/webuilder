@@ -1,19 +1,35 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "target": "es5",
-        "strict": true,
-        "module": "es2015",
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    },
-    "include": [
-        "./src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "build"
-    ]
+  "include": [
+    "src/**/*",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ],
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es5",
+    "strict": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true, // disable this on production
+    "paths": {
+      "_Components/*": [
+        "src/components/*"
+      ],
+      "_Assets/*": [
+        "dist/assets/*"
+      ],
+      "_PagesSrc/*": [
+        "src/pages_src/*"
+      ],
+      "_Tests/*": [
+        "src/test/*"
+      ]
+    }
+  }
 }
