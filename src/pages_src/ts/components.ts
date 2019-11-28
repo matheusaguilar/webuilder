@@ -17,7 +17,6 @@ import WBtextfield from '_Components/wrapper/WBtextfield.vue';
 import WBselect from '_Components/wrapper/WBselect.vue';
 import WBlist from '_Components/wrapper/WBlist.vue';
 import WBlistItem from '_Components/wrapper/WBlistItem.vue';
-import EcommerceCard from '_Components/wrapper/EcommerceCard.vue';
 
 const componentArray = [
   WBtopAppBar,
@@ -38,8 +37,7 @@ const componentArray = [
   WBtextfield,
   WBselect,
   WBlist,
-  WBlistItem,
-  EcommerceCard
+  WBlistItem
 ]
 
 export class ComponentRegister {
