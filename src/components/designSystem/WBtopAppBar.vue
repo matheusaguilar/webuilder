@@ -149,3 +149,23 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.app-bar {
+  position: absolute;
+}
+
+.mdc-top-app-bar {
+  z-index: 7;
+}
+
+#wbMDCTopAppBarMenuBtn{
+  display: none;
+}
+
+@media screen and (max-width: 1024px){
+  #wbMDCTopAppBarMenuBtn{
+    display: block;
+  }
+}
+</style>

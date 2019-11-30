@@ -5,7 +5,7 @@
     aria-modal="true"
     aria-labelledby="my-dialog-title"
     aria-describedby="my-dialog-content"
-    :id="id">
+    :id="id" :data-wbid="'modal' + _uid">
     <div class="mdc-dialog__container">
       <div class="mdc-dialog__surface">
         <h2 class="mdc-dialog__title">{{title}}</h2>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+
 export default {
   props: {
     id: null,
@@ -32,6 +34,14 @@ export default {
     text: { default: 'Dialog body text goes here.' },
     labelNo: { default: 'No' },
     labelYes: { default: 'Yes' }
+  },
+  data: function() {
+    return {
+      element: null
+    };
+  },
+  mounted() {
+    this.element = Builder.getInstance().init("WBmodal", "modal" + this._uid);
   }
 };
 </script>

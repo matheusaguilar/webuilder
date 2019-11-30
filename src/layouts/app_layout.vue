@@ -307,6 +307,31 @@ export default class AppLayout extends Vue {
     }
   }
 
+  /**
+   * remove the inline styles that don't need.
+   */
+  removeParamStyle(className: string, style: string) {
+    let nStyle;
+
+    // card || imgBackground
+    if (className.includes('mdc-card__media') || className.includes('WBimgBackground')) {
+      nStyle = style.split(';');
+      for (let i = 0; i < nStyle.length; i++) {
+        if (nStyle[i].includes('background-image')) {
+          nStyle.splice(i, 1);
+          break;
+        }
+      }
+
+      return nStyle.join(';');
+    }
+
+    return style;
+  }
+
+  /**
+   * return the component css path (.class class ...) and style
+   */
   getStyleComp(element: any) {
     const styleClass = [];
     let ele = element;
@@ -327,7 +352,8 @@ export default class AppLayout extends Vue {
       buildClass += styleClass[i];
     }
 
-    return (buildClass += ` {\n ${element.style.cssText} \n}`);
+    const nStyle = this.removeParamStyle(buildClass, element.style.cssText);
+    return nStyle.length > 0 ? buildClass += ` {\n ${nStyle} \n}` : '';
   }
 
   /**
@@ -824,6 +850,7 @@ body {
 
 .wbcomp-active {
   border: 1px solid $selected;
+  box-sizing: border-box;
 }
 
 .wbcursor {

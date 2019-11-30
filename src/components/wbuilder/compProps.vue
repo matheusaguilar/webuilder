@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component
 export default class CompProps extends Vue {
@@ -48,24 +48,23 @@ export default class CompProps extends Vue {
   propValues: any = [];
 
   changeProps(index: number, event: any) {
-    if (typeof this.propValues[index] === "object") {
-      if (this.propValues[index].type == "select") { //Select
-        this.component.instance[this.propLabels[index]] = this.propValues[
-          index
-        ].options.indexOf(event.target.value);
-      } else { //Checkbox
+    if (typeof this.propValues[index] === 'object') {
+      if (this.propValues[index].type === 'select') { // Select
+        this.component.instance[this.propLabels[index]] =
+        this.propValues[index].options.indexOf(event.target.value);
+      } else { // Checkbox
         this.propValues[index].value = !this.propValues[index].value;
         this.component.instance[this.propLabels[index] + '__Check'] = this.propValues[index].value;
       }
 
-    } else { //Input
+    } else { // Input
       this.propValues[index] = event.target.value;
       this.component.instance[this.propLabels[index]] = event.target.value;
     }
-    this.$emit("changeprop", this.component.element);
+    this.$emit('changeprop', this.component.element);
   }
 
-  @Watch("component")
+  @Watch('component')
   componentChange(val: any, oldVal: any) {
     this.propLabels = [];
     this.propValues = [];
@@ -75,22 +74,22 @@ export default class CompProps extends Vue {
 
       if (instance.$options.props) {
         this.propLabels = Object.keys(instance.$options.props);
-        for (var i = 0; i < this.propLabels.length; i++) {
-          if (instance.$data[this.propLabels[i] + "__Options"] != undefined) {
+        for (let i = 0; i < this.propLabels.length; i++) {
+          if (instance.$data[this.propLabels[i] + '__Options'] !== undefined) {
             this.propValues.push({
-              type: "select",
-              options: instance.$data[this.propLabels[i] + "__Options"],
+              type: 'select',
+              options: instance.$data[this.propLabels[i] + '__Options'],
               value: instance[this.propLabels[i]]
             });
-          } else if (instance.$data[this.propLabels[i] + "__Check"] != undefined) {
-            //Checkbox
+          } else if (instance.$data[this.propLabels[i] + '__Check'] !== undefined) {
+            // Checkbox
             this.propValues.push({
-              type: "checkbox",
-              value: instance.$data[this.propLabels[i] + "__Check"]
+              type: 'checkbox',
+              value: instance.$data[this.propLabels[i] + '__Check']
             });
 
           } else {
-            //Input
+            // Input
             this.propValues.push(instance[this.propLabels[i]]);
           }
         }

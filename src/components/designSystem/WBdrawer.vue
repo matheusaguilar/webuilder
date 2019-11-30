@@ -27,26 +27,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 body {
   display: flex;
   height: 100vh;
 }
+</style>
 
-.mdc-drawer-app-content {
-  flex: auto;
-  overflow: auto;
-  position: relative;
-}
-
-.app-bar {
-  position: absolute;
-}
-
-.mdc-top-app-bar {
-  z-index: 7;
-}
-
+<style lang="scss" scoped>
 .padding-standard{
   padding-top: 64px;
 }
@@ -55,19 +43,15 @@ body {
   padding-top: 48px;
 }
 
-#wbMDCTopAppBarMenuBtn{
-  display: none;
-}
-
-@media screen and (max-width: 1024px){
-  #wbMDCTopAppBarMenuBtn{
-    display: block;
-  }
-}
-
 @media screen and (min-width: 1024px){
   #wbMDCDrawer {
     display: none;
+  }
+}
+
+@media screen and (max-width: 599px){
+  .padding-standard{
+    padding-top: 56px;
   }
 }
 </style>

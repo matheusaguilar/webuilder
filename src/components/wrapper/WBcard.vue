@@ -1,5 +1,5 @@
 <template>
-  <WBcard :variant="variant__Options[variant]" 
+  <WBcard :variant="variant__Options[variant]" img="/assets/img/card.jpg"
     :title="title" :subtitle="subtitle" :description="description" 
     :action="action__Check">
       <div class="wbuilder-insert"></div>
@@ -38,7 +38,7 @@ export default {
     },
     wbGetHTML(elem){
       return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
-        [`variant="${this.variant__Options[this.variant]}" 
+        [`variant="${this.variant__Options[this.variant]}" img="/assets/img/card.jpg"
         title="${this.title}" subtitle="${this.subtitle}" description="${this.description}" 
         action="${this.action__Check}"`], elem, true);
     }

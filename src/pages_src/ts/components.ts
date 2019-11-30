@@ -1,4 +1,5 @@
 import WBtopAppBar from '_Components/wrapper/WBtopAppBar.vue';
+import WBimgBackground from '_Components/wrapper/WBimgBackground.vue';
 import WBlayoutGrid from '_Components/wrapper/WBlayoutGrid.vue';
 import WBlayoutGridCell from '_Components/wrapper/WBlayoutGridCell.vue';
 import WBbutton from '_Components/wrapper/WBbutton.vue';
@@ -20,6 +21,7 @@ import WBlistItem from '_Components/wrapper/WBlistItem.vue';
 
 const componentArray = [
   WBtopAppBar,
+  WBimgBackground,
   WBlayoutGrid,
   WBlayoutGridCell,
   WBbutton,

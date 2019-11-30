@@ -29,8 +29,7 @@ export default {
   data: function() {
     return {
       variant__Options: [
-        'standard',
-        'selection'
+        'standard'
       ],
       __wbInsertSlot__Options: ['0', '1']
     };

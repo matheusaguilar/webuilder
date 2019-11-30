@@ -27,7 +27,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}
+
 .main-content {
   overflow: auto;
   height: 100%;
@@ -39,5 +45,11 @@ export default {
 
 .padding-dense{
   padding-top: 48px;
+}
+
+@media screen and (max-width: 599px){
+  .padding-standard{
+    padding-top: 56px;
+  }
 }
 </style>
