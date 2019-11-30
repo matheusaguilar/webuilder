@@ -16,8 +16,9 @@ export default {
 <style lang="scss" scoped>
 .wb-img-background {
   width: 100%;
-  min-height: 300px;
+  min-height: 420px;
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

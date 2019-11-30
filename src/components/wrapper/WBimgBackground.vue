@@ -20,7 +20,7 @@ export default {
       return ['WBimgBackground'];
     },
     wbGetHTML(elem){
-      return WrapperUtil.getInstance().getTag(this.wbGetTag(), [`img="${img}"`], elem, true);
+      return WrapperUtil.getInstance().getTag(this.wbGetTag(), [`img="${this.img}"`], elem, true);
     }
   }
 };
