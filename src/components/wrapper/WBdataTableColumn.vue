@@ -31,7 +31,7 @@ export default {
     },
     wbGetHTML(elem){
       return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
-        [`variant="${this.variant__Options[this.variant]}" text="${this.text}" numeric="${this.numeric__Check}"`], elem, true);
+        [`variant="${this.variant__Options[this.variant]}" text="${this.text}" :numeric="${this.numeric__Check}"`], elem, true);
     }
   }
 };

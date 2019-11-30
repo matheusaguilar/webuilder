@@ -29,7 +29,8 @@ export default {
       return ['WBimgBackgroundContent'];
     },
     wbGetHTML(elem){
-      return WrapperUtil.getInstance().getTag(this.wbGetTag(), [`position="${this.position}"`], elem, true);
+      return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
+        [`position="${this.position__Options[this.position]}"`], elem, true);
     }
   }
 };

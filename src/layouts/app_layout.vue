@@ -243,7 +243,7 @@ export default class AppLayout extends Vue {
     const script = 'script';
     const style = 'style';
 
-    html += '<template>\n<div>';
+    html += '<template>\n<div style="width: 100%">';
     // get the html of components
     for (const elem of this.deviceElements) {
       html += (<any>elem.instance).wbGetHTML(elem);

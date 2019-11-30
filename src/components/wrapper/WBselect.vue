@@ -32,7 +32,7 @@ export default {
     },
     wbGetHTML(elem){
       return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
-        [`variant="${this.variant__Options[this.variant]}" label="${this.label}" shaped="${this.shaped__Check}"
+        [`variant="${this.variant__Options[this.variant]}" label="${this.label}" :shaped="${this.shaped__Check}"
         items=""`], elem, true);
     }
   }

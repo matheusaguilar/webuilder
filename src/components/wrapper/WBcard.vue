@@ -40,7 +40,7 @@ export default {
       return WrapperUtil.getInstance().getTag(this.wbGetTag(), 
         [`variant="${this.variant__Options[this.variant]}" img="/assets/img/card.jpg"
         title="${this.title}" subtitle="${this.subtitle}" description="${this.description}" 
-        action="${this.action__Check}"`], elem, true);
+        :action="${this.action__Check}"`], elem, true);
     }
   }
 };
