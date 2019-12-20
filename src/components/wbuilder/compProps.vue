@@ -30,6 +30,7 @@
           :id="'input' + index"
           :value="propValues[index]"
           @change="changeProps(index, $event)"
+          @keydown="$event.stopPropagation()"
         />
 
       </div>
@@ -54,7 +55,7 @@ export default class CompProps extends Vue {
         this.propValues[index].options.indexOf(event.target.value);
       } else { // Checkbox
         this.propValues[index].value = !this.propValues[index].value;
-        this.component.instance[this.propLabels[index] + '__Check'] = this.propValues[index].value;
+        this.component.instance[`${this.propLabels[index]}__Check`] = this.propValues[index].value;
       }
 
     } else { // Input
@@ -62,6 +63,10 @@ export default class CompProps extends Vue {
       this.component.instance[this.propLabels[index]] = event.target.value;
     }
     this.$emit('changeprop', this.component.element);
+  }
+
+  teste() {
+    console.log('hmm');
   }
 
   @Watch('component')
@@ -75,17 +80,17 @@ export default class CompProps extends Vue {
       if (instance.$options.props) {
         this.propLabels = Object.keys(instance.$options.props);
         for (let i = 0; i < this.propLabels.length; i++) {
-          if (instance.$data[this.propLabels[i] + '__Options'] !== undefined) {
+          if (instance.$data[`${this.propLabels[i]}__Options`] !== undefined) {
             this.propValues.push({
               type: 'select',
-              options: instance.$data[this.propLabels[i] + '__Options'],
+              options: instance.$data[`${this.propLabels[i]}__Options`],
               value: instance[this.propLabels[i]]
             });
-          } else if (instance.$data[this.propLabels[i] + '__Check'] !== undefined) {
+          } else if (instance.$data[`${this.propLabels[i]}__Check`] !== undefined) {
             // Checkbox
             this.propValues.push({
               type: 'checkbox',
-              value: instance.$data[this.propLabels[i] + '__Check']
+              value: instance.$data[`${this.propLabels[i]}__Check`]
             });
 
           } else {

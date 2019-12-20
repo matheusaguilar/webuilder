@@ -63,17 +63,17 @@ function getCompName(comp: any): ComponentRegister {
 
 export class ComponentsLoader {
 
-  private _items: ComponentRegister[];
+  private itemsComp: ComponentRegister[];
 
   constructor() {
-    this._items = [];
+    this.itemsComp = [];
     for (const comp of componentArray) {
-      this._items.push(getCompName(comp));
+      this.itemsComp.push(getCompName(comp));
     }
   }
 
   get items(): ComponentRegister[] {
-    return this._items;
+    return this.itemsComp;
   }
 
 }
