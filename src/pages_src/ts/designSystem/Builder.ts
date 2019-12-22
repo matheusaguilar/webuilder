@@ -1,4 +1,4 @@
-const DEVELOP = false;
+const DEVELOP = true;
 
 enum BuilderComponents {
   WBtopAppBar = './WBtopAppBar',
