@@ -1,23 +1,27 @@
-import { WBtopAppBar } from './WBtopAppBar';
-import { WBdrawer } from './WBdrawer';
-import { WBdrawerMainContent } from './WBdrawerMainContent';
-import { WBbutton } from './WBbutton';
-import { WBbuttonFAB } from './WBbuttonFAB';
-import { WBbuttonIcon } from './WBbuttonIcon';
-import { WBcard } from './WBcard';
-import { WBcheckbox } from './WBcheckbox';
-import { WBchipContainer } from './WBchipContainer';
-import { WBlist } from './WBlist';
-import { WBmodal } from './WBmodal';
-import { WBradioButton } from './WBradioButton';
-import { WBtextfield } from './WBtextfield';
-import { WBselect } from './WBselect';
+const DEVELOP = false;
 
-const develop = true;
+enum BuilderComponents {
+  WBtopAppBar = './WBtopAppBar',
+  WBdrawer = './WBdrawer',
+  WBdrawerMainContent = './WBdrawerMainContent',
+  WBbutton = './WBbutton',
+  WBbuttonFAB = './WBbuttonFAB',
+  WBbuttonIcon = './WBbuttonIcon',
+  WBcard = './WBcard',
+  WBcheckbox = './WBcheckbox',
+  WBchipContainer = './WBchipContainer',
+  WBlist = './WBlist',
+  WBmodal = './WBmodal',
+  WBradioButton = './WBradioButton',
+  WBtextfield = './WBtextfield',
+  WBselect = './WBselect'
+}
 
 export class Builder {
 
   static instance: Builder | null = null;
+
+  wbImports: any = {};
 
   // topAppBar variables for initialize
   topAppBarElement: any = null;
@@ -38,9 +42,9 @@ export class Builder {
    * if outside webuilder then call scripts from each element, else return null.
    * @param element the element to call the script.
    */
-  init(element: string, dataId?: string) {
-    if (!develop) {
-      return this.getElement(element, dataId);
+  async init(element: string, dataId?: string) {
+    if (!DEVELOP) {
+      return await this.getElement(element, dataId);
     }
     return null;
   }
@@ -49,52 +53,95 @@ export class Builder {
    * call each element script.
    * @param element the element to call the script.
    */
-  private getElement(element: string, dataId?: string) {
+  private async getElement(element: string, dataId?: string) {
+    // let component = null;
     switch (element) {
       case 'WBtopAppBar':
-        this.topAppBarElement = new WBtopAppBar();
-        return this.topAppBarElement;
+        this.lazyImportComponent(BuilderComponents.WBtopAppBar).then((component) => {
+          this.topAppBarElement = new component();
+          return this.topAppBarElement;
+        });
+        break;
 
       case 'WBdrawer':
-        this.drawerElement = new WBdrawer();
-        return this.drawerElement;
+        this.lazyImportComponent(BuilderComponents.WBdrawer).then((component) => {
+          this.drawerElement = new component();
+          return this.drawerElement;
+        });
+        break;
 
       case 'WBdrawerMainContent':
-        this.drawerMainContentElement = new WBdrawerMainContent();
-        return this.drawerMainContentElement;
+        this.lazyImportComponent(BuilderComponents.WBdrawerMainContent).then((component) => {
+          this.drawerMainContentElement = new component();
+          return this.drawerMainContentElement;
+        });
+        break;
 
       case 'WBbutton':
-        return new WBbutton(dataId);
+        this.lazyImportComponent(BuilderComponents.WBbutton).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBbuttonFAB':
-        return new WBbuttonFAB(dataId);
+        this.lazyImportComponent(BuilderComponents.WBbuttonFAB).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBbuttonIcon':
-        return new WBbuttonIcon(dataId);
+        this.lazyImportComponent(BuilderComponents.WBbuttonIcon).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBcard':
-        return new WBcard(dataId);
+        this.lazyImportComponent(BuilderComponents.WBcard).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBcheckbox':
-        return new WBcheckbox(dataId);
+        this.lazyImportComponent(BuilderComponents.WBcheckbox).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBchipContainer':
-        return new WBchipContainer(dataId);
+        this.lazyImportComponent(BuilderComponents.WBchipContainer).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBlist':
-        return new WBlist(dataId);
+        this.lazyImportComponent(BuilderComponents.WBlist).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBmodal':
-        return new WBmodal(dataId);
+        this.lazyImportComponent(BuilderComponents.WBmodal).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBradioButton':
-        return new WBradioButton(dataId);
+        this.lazyImportComponent(BuilderComponents.WBradioButton).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBtextfield':
-        return new WBtextfield(dataId);
+        this.lazyImportComponent(BuilderComponents.WBtextfield).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       case 'WBselect':
-        return new WBselect(dataId);
+        this.lazyImportComponent(BuilderComponents.WBselect).then((component) => {
+          return new component(dataId);
+        });
+        break;
 
       default:
         return null;
@@ -102,23 +149,72 @@ export class Builder {
   }
 
   /**
+   * lazy import a component.
+   * @param component the component to be imported.
+   */
+  private lazyImportComponent(component: BuilderComponents): Promise<any> {
+    return new Promise((resolve) => {
+      const nameWithOutSpecial = component.replace(/\W/g, '');
+      const nameLowercase = nameWithOutSpecial.toLowerCase();
+
+      if (!this.wbImports[nameLowercase]) {
+        this.wbImports[nameLowercase] = true;
+        import(`./${component.replace(/\W/g, '')}`).then((mod) => {
+          this.wbImports[nameLowercase] = mod[nameWithOutSpecial];
+          resolve(this.wbImports[nameLowercase]);
+
+        }).catch((err) => {
+          this.wbImports[nameLowercase] = null;
+          console.error(`Error on import module ${component}`);
+          console.error(err);
+          resolve(() => {});
+        });
+
+      } else {
+        if (this.wbImports[nameLowercase] === true) {
+          const checkInterval = window.setInterval(() => {
+            if (this.wbImports[nameLowercase] !== true) {
+              window.clearInterval(checkInterval);
+              resolve(this.wbImports[nameLowercase]);
+            }
+          },                                       100);
+
+        } else {
+          resolve(this.wbImports[nameLowercase]);
+        }
+      }
+    });
+  }
+
+  /**
    * init some components after all page has rendered.
    */
   public afterMounted() {
     // topAppBar
-    if (this.topAppBarElement && this.drawerElement && this.drawerMainContentElement) {
-      const drawer = this.drawerElement.mdc.attachTo(this.drawerElement.dom);
-      const topAppBar = this.topAppBarElement.mdc.attachTo(this.topAppBarElement.dom);
+    const checkInterval = window.setInterval(() => {
+      if (this.topAppBarElement && this.drawerElement && this.drawerMainContentElement) {
+        window.clearInterval(checkInterval);
+        const drawer = this.drawerElement.mdc.attachTo(this.drawerElement.dom);
+        const topAppBar = this.topAppBarElement.mdc.attachTo(this.topAppBarElement.dom);
 
-      topAppBar.setScrollTarget(this.drawerMainContentElement.dom);
-      const btn = document.getElementById('wbMDCTopAppBarMenuBtn');
+        topAppBar.setScrollTarget(this.drawerMainContentElement.dom);
+        const btn = document.getElementById('wbMDCTopAppBarMenuBtn');
 
-      if (btn) {
-        btn.addEventListener('click', () => {
-          drawer.open = !drawer.open;
-        })
+        if (btn) {
+          btn.addEventListener('click', () => {
+            if (!drawer.open) {
+              drawer.open = true;
+              this.drawerMainContentElement.dom.style.opacity = '0.4';
+              this.drawerMainContentElement.dom.style.pointerEvents = 'none';
+            } else {
+              drawer.open = false;
+              this.drawerMainContentElement.dom.style.opacity = '';
+              this.drawerMainContentElement.dom.style.pointerEvents = '';
+            }
+          })
+        }
       }
-    }
+    },                                       100);
   }
 
 }

@@ -179,20 +179,43 @@ function createArquivosJS(obj) {
 }
 
 async function createJS(srcpath, path, data) {
-  fs.writeFileSync(srcpath + replacePath(path) + 'index.js', data);
+  fs.writeFileSync(srcpath + replacePath(path) + 'index.ts', data);
 }
 
 function createIndexFile(basepath, layout, path, files) {
   var txt = '';
   var baseReplaced = basepath.replace(/\\/g, '/');
 
-  txt += 'import Layout from "' + baseReplaced + layoutLocation + layout + '";\n';
-  txt += 'import Error404 from "' + baseReplaced + pagesLocation + '/' + path.split('/')[1] + '/error404.vue";\n';
-  txt += getImports(baseReplaced, path, files);
-  txt += 'Vue.config.productionTip = false;\n';
-  txt += 'const router = new VueRouter({\n' +
-    'routes: [' + getRoutes(files) + '\n]});';
-  txt += '\nnew Vue({ router, render: function(createElement){return createElement(Layout)}}).$mount("#app");'
+  // JS
+  // txt += 'import Layout from "' + baseReplaced + layoutLocation + layout + '";\n';
+  // txt += 'import Error404 from "' + baseReplaced + pagesLocation + '/' + path.split('/')[1] + '/error404.vue";\n';
+  // txt += getImports(baseReplaced, path, files);
+  // txt += 'Vue.config.productionTip = false;\n';
+  // txt += 'const router = new VueRouter({\n' +
+  //   'routes: [' + getRoutes(files) + '\n]});';
+  // txt += '\nnew Vue({ router, render: function(createElement){return createElement(Layout)}}).$mount("#app");'
+
+  //TS
+  txt += `
+  import Vue from 'vue';
+  import VueRouter from 'vue-router';
+  // @ts-ignore
+  import Layout from '${baseReplaced + layoutLocation + layout}';
+  // @ts-ignore
+  import Error404 from '${baseReplaced + pagesLocation + '/' + path.split('/')[1] + '/error404.vue'}';
+  ${getImports(baseReplaced, path, files)}
+
+  Vue.config.productionTip = false;
+  Vue.use(VueRouter);
+
+  const router = new VueRouter({routes: [${getRoutes(files)}]});
+
+  new Vue({
+    el: "#app",
+    router: router,
+    render: h => h(Layout)
+  });
+  `;
 
   return txt;
 }
@@ -202,12 +225,15 @@ function getImports(baseReplaced, path, files){
 
   files.forEach(function (file, index) {
     if (file == 'index.vue') {
+      txt+= '// @ts-ignore\n'; // ts
       txt+= 'import Index from "' + baseReplaced + pagesLocation + path + 'index.vue";\n';
 
     } else if (file == '_index.vue'){
+      txt+= '// @ts-ignore\n'; // ts
       txt+= 'import Index from "' + baseReplaced + pagesLocation + path + '_index.vue";\n';
 
     } else if (file != 'error404.vue'){
+      txt+= '// @ts-ignore\n'; // ts
       var fileName = file;
       if (fileName.charAt(0) == '_'){
         fileName = fileName.substring(1);
@@ -225,10 +251,11 @@ function getRoutes(files) {
 
   files.forEach(function (file, index) {
     if (file == 'index.vue') {
-      txt += '\n{ path: "/", component: Index}'
-
+      txt += '\n{ path: "/", component: Index}';
+      txt += ',';
     } else if (file == '_index.vue'){
       txt += '\n{ path: "/:id", component: Index}'
+      txt += ',';
 
     } else if (file != 'error404.vue') {
       var filePath = getNameLower(file);
@@ -238,12 +265,10 @@ function getRoutes(files) {
         filePath = filePath.substring(1) + '/:id';
       }
       txt += '\n{ path: "/' + filePath + '", component: ' + (fileName.charAt(0).toUpperCase() + getNameLower(fileName).substring(1)) + '}';
+      txt += ',';
       // ajax import
       // txt += '\n{ path: "/' + getNameLower(file) + '",' +
       //   ' component: () => import(/* webpackChunkName: "' + replacePath(path) + getNameLower(file) + '" */ "' + basepath +  pagesLocation + path + file + '")}'
-    }
-    if (index != files.length) {
-      txt += ',';
     }
   });
   //Error404 page
@@ -309,7 +334,7 @@ function createHTMLtxt(obj, path){
   '</head><body><div id="app"></div>' +
   // '<div id="replace"></div>' +
   getScripts(script) +
-  '<script src="./' + replacePath(path) + 'index_bundle.js"></script>' +
+  '<script src="./bundle/' + replacePath(path) + 'index_bundle.js"></script>' +
   '</body></html>'
 
   return txt;
@@ -376,7 +401,7 @@ module.exports.entry = function(basepath){
   var paths;
   paths = predictReadFolders(basepath + pagesLocation + '/', '/');
   for(var i=0; i<paths.length; i++){
-    obj[replacePath(paths[i]) + 'index'] = './build/src/' + replacePath(paths[i]) + 'index.js';
+    obj[replacePath(paths[i]) + 'index'] = './build/src/' + replacePath(paths[i]) + 'index.ts';
   }
   return obj;
 }

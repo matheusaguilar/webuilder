@@ -12,6 +12,7 @@ module.exports = (env, argv) => {
      */
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
+      publicPath: '/bundle/',
       compress: true,
       disableHostCheck: true,
       port: 3000,
@@ -36,8 +37,8 @@ module.exports = (env, argv) => {
     entry: EntryPlugin.entry(__dirname),
     output: {
       path: path.resolve(__dirname, 'dist/bundle'),
+      publicPath: '/bundle/',
       filename: '[name]_bundle.js',
-      publicPath: '/',
       devtoolModuleFilenameTemplate: info => {
         var $filename = 'sources://' + info.resourcePath;
         if (info.resourcePath.match(/\.vue$/) &&

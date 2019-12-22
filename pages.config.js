@@ -36,15 +36,15 @@ const DEFAULT_CSS_PAGES = [
 *
 */
 const DEFAULT_SCRIPTS_PAGES = [
-  './assets/vendor/vue/vue.min.js',
-  './assets/vendor/vue/vue_router.min.js',
+  // './assets/vendor/vue/vue.min.js',
+  // './assets/vendor/vue/vue_router.min.js',
   './assets/vendor/mdc/material-components-web.min.js',
-  './assets/vendor/prism/prism.js'
+  'src="./assets/vendor/prism/prism.js" data-manual'
 ];
 
 const DEFAULT_SCRIPTS_DEV_PAGES = [
-  'https://unpkg.com/vue/dist/vue.js',
-  'https://unpkg.com/vue-router/dist/vue-router.js',
+  // 'https://unpkg.com/vue/dist/vue.js',
+  // 'https://unpkg.com/vue-router/dist/vue-router.js',
   './assets/vendor/mdc/material-components-web.min.js',
   'src="./assets/vendor/prism/prism.js" data-manual'
 ];
