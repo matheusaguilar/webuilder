@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
       publicPath: '/bundle/',
       compress: true,
       disableHostCheck: true,
-      port: 3000,
+      port: 3100,
       watchOptions: {
         ignored: [
           path.resolve(__dirname, 'build/src'),

@@ -33,6 +33,7 @@ export default {
   width: 33.3%;
   max-width: 600px;
   min-height: 420px;
+  height: 100%;
 
   // phone screen
   @media screen and (max-width: 599px){
