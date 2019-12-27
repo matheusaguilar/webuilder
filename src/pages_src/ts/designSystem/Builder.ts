@@ -1,4 +1,4 @@
-const DEVELOP = true;
+const DEVELOP = false;
 
 enum BuilderComponents {
   WBtopAppBar = './WBtopAppBar',
@@ -42,9 +42,9 @@ export class Builder {
    * if outside webuilder then call scripts from each element, else return null.
    * @param element the element to call the script.
    */
-  async init(element: string, dataId?: string) {
+  init(element: string, dataId?: string) {
     if (!DEVELOP) {
-      return await this.getElement(element, dataId);
+      return this.getElement(element, dataId);
     }
     return null;
   }
@@ -53,99 +53,100 @@ export class Builder {
    * call each element script.
    * @param element the element to call the script.
    */
-  private async getElement(element: string, dataId?: string) {
-    // let component = null;
-    switch (element) {
-      case 'WBtopAppBar':
-        this.lazyImportComponent(BuilderComponents.WBtopAppBar).then((component) => {
-          this.topAppBarElement = new component();
-          return this.topAppBarElement;
-        });
-        break;
+  private getElement(element: string, dataId?: string) {
+    return new Promise((resolve) => {
+      switch (element) {
+        case 'WBtopAppBar':
+          this.lazyImportComponent(BuilderComponents.WBtopAppBar).then((component) => {
+            this.topAppBarElement = new component();
+            resolve(this.topAppBarElement);
+          });
+          break;
 
-      case 'WBdrawer':
-        this.lazyImportComponent(BuilderComponents.WBdrawer).then((component) => {
-          this.drawerElement = new component();
-          return this.drawerElement;
-        });
-        break;
+        case 'WBdrawer':
+          this.lazyImportComponent(BuilderComponents.WBdrawer).then((component) => {
+            this.drawerElement = new component();
+            resolve(this.drawerElement);
+          });
+          break;
 
-      case 'WBdrawerMainContent':
-        this.lazyImportComponent(BuilderComponents.WBdrawerMainContent).then((component) => {
-          this.drawerMainContentElement = new component();
-          return this.drawerMainContentElement;
-        });
-        break;
+        case 'WBdrawerMainContent':
+          this.lazyImportComponent(BuilderComponents.WBdrawerMainContent).then((component) => {
+            this.drawerMainContentElement = new component();
+            resolve(this.drawerMainContentElement);
+          });
+          break;
 
-      case 'WBbutton':
-        this.lazyImportComponent(BuilderComponents.WBbutton).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBbutton':
+          this.lazyImportComponent(BuilderComponents.WBbutton).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBbuttonFAB':
-        this.lazyImportComponent(BuilderComponents.WBbuttonFAB).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBbuttonFAB':
+          this.lazyImportComponent(BuilderComponents.WBbuttonFAB).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBbuttonIcon':
-        this.lazyImportComponent(BuilderComponents.WBbuttonIcon).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBbuttonIcon':
+          this.lazyImportComponent(BuilderComponents.WBbuttonIcon).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBcard':
-        this.lazyImportComponent(BuilderComponents.WBcard).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBcard':
+          this.lazyImportComponent(BuilderComponents.WBcard).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBcheckbox':
-        this.lazyImportComponent(BuilderComponents.WBcheckbox).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBcheckbox':
+          this.lazyImportComponent(BuilderComponents.WBcheckbox).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBchipContainer':
-        this.lazyImportComponent(BuilderComponents.WBchipContainer).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBchipContainer':
+          this.lazyImportComponent(BuilderComponents.WBchipContainer).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBlist':
-        this.lazyImportComponent(BuilderComponents.WBlist).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBlist':
+          this.lazyImportComponent(BuilderComponents.WBlist).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBmodal':
-        this.lazyImportComponent(BuilderComponents.WBmodal).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBmodal':
+          this.lazyImportComponent(BuilderComponents.WBmodal).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBradioButton':
-        this.lazyImportComponent(BuilderComponents.WBradioButton).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBradioButton':
+          this.lazyImportComponent(BuilderComponents.WBradioButton).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBtextfield':
-        this.lazyImportComponent(BuilderComponents.WBtextfield).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBtextfield':
+          this.lazyImportComponent(BuilderComponents.WBtextfield).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      case 'WBselect':
-        this.lazyImportComponent(BuilderComponents.WBselect).then((component) => {
-          return new component(dataId);
-        });
-        break;
+        case 'WBselect':
+          this.lazyImportComponent(BuilderComponents.WBselect).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
 
-      default:
-        return null;
-    }
+        default:
+          resolve(null);
+      }
+    });
   }
 
   /**
