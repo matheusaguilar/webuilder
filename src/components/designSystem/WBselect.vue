@@ -2,7 +2,10 @@
   <div class="select-container" :id="id" :data-wbid="'select' + _uid">
     <div :class="'mdc-select' + shapedClass" v-if="variant == 'filled'">
       <i class="mdc-select__dropdown-icon"></i>
-      <select class="mdc-select__native-control">
+      <select class="mdc-select__native-control"
+        :required="required? true : false"
+        v-bind:value="value"
+        v-on="inputListeners">
         <option value disabled selected></option>
         <option v-for="(item, index) in items" :value="index" :key="index">{{item}}</option>
       </select>
@@ -12,7 +15,10 @@
 
     <div :class="'mdc-select mdc-select--outlined' + shapedClass" v-if="variant == 'outlined'">
       <i class="mdc-select__dropdown-icon"></i>
-      <select class="mdc-select__native-control">
+      <select class="mdc-select__native-control"
+        :required="required? true : false"
+        v-bind:value="value"
+        v-on="inputListeners">
         <option value disabled selected></option>
         <option v-for="(item, index) in items" :value="index" :key="index">{{item}}</option>
       </select>
@@ -33,14 +39,26 @@ import { Builder } from "_PagesSrc/ts/designSystem/Builder";
 export default {
   props: {
     id: {default: null},
+    value: { default: null },
     variant: { default: "filled" },
     label: { default: "Label" },
     shaped: { default: false },
+    required: { default: false },
     items: { default: [] }
   },
   computed: {
     shapedClass: function() {
       return this.shaped ? " mdc-shaped" : "";
+    },
+    inputListeners: function () {
+      var vm = this;
+      return Object.assign({},
+        this.$listeners, {
+          input: function (event) { // make work with v-model
+            vm.$emit('input', event.target.value);
+          }
+        }
+      );
     }
   },
   data: function() {

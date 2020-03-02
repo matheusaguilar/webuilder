@@ -2,7 +2,7 @@
   <div class="mdc-card-container" :id="id" :data-wbid="'card' + _uid">
     <!--Basic-->
     <div class="mdc-card mdc-basic-card" v-if="variant == 'basic'">
-      <div class="mdc-card__primary-action">
+      <div class="mdc-card__primary-action" @click="$emit('click')">
         <div class="mdc-card__media mdc-card__media--16-9" :style="{ backgroundImage: 'url(' + img + ')' }"></div>
         <div class="mdc-card__primary" v-if="title || subtitle">
           <h2
@@ -29,7 +29,7 @@
 
     <!--Text Over Media-->
     <div class="mdc-card mdc-basic-overmedia" v-if="variant == 'basic-overmedia'">
-      <div class="mdc-card__primary-action">
+      <div class="mdc-card__primary-action" @click="$emit('click')">
         <div class="mdc-card__media mdc-card__media--16-9" :style="{ backgroundImage: 'url(' + img + ')' }">
           <div class="mdc-card__media-content mdc-overmedia-card__media-content">
             <div class="mdc-card__primary mdc-overmedia-card__primary">
@@ -65,7 +65,7 @@
           v-if="subtitle"
         >{{subtitle}}</h3>
       </div>
-      <div class="mdc-card__primary-action">
+      <div class="mdc-card__primary-action" @click="$emit('click')">
         <div class="mdc-card__media mdc-card__media--16-9" :style="{ backgroundImage: 'url(' + img + ')' }"></div>
         <div
           class="mdc-card__secondary mdc-header-card__secondary mdc-typography mdc-typography--body2"
@@ -81,7 +81,7 @@
 
     <!--ImageText-->
     <div class="mdc-card mdc-image-text" v-if="variant == 'image-text'">
-      <div class="mdc-card__primary-action">
+      <div class="mdc-card__primary-action" @click="$emit('click')">
         <div class="mdc-card__media mdc-card__media--square" :style="{ backgroundImage: 'url(' + img + ')' }"></div>
         <div class="mdc-card__primary">
           <h2

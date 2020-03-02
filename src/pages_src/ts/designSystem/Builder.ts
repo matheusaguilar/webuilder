@@ -14,6 +14,7 @@ enum BuilderComponents {
   WBmodal = './WBmodal',
   WBradioButton = './WBradioButton',
   WBtextfield = './WBtextfield',
+  WBtextarea = './WBtextarea',
   WBselect = './WBselect'
 }
 
@@ -133,6 +134,12 @@ export class Builder {
 
         case 'WBtextfield':
           this.lazyImportComponent(BuilderComponents.WBtextfield).then((component) => {
+            resolve(new component(dataId));
+          });
+          break;
+
+        case 'WBtextarea':
+          this.lazyImportComponent(BuilderComponents.WBtextarea).then((component) => {
             resolve(new component(dataId));
           });
           break;

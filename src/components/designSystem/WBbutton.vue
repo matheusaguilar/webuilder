@@ -1,5 +1,6 @@
 <template>
-  <button :class="'mdc-button' + buttonClass + denseClass" :id="id" :data-wbid="'button' + _uid">
+  <button :type="type" :class="'mdc-button' + buttonClass + denseClass" :id="id" :data-wbid="'button' + _uid"
+    :disabled="disabled">
     <i class="material-icons mdc-button__icon" aria-hidden="true" v-if="leftIcon">{{leftIcon}}</i>
     <span class="mdc-button__label">{{text}}</span>
     <i class="material-icons mdc-button__icon" aria-hidden="true" v-if="rightIcon">{{rightIcon}}</i>
@@ -12,11 +13,13 @@ import { Builder } from "_PagesSrc/ts/designSystem/Builder";
 export default {
   props: {
     id: null,
+    type: { default: "button" },
     text: { default: "Text" },
     variant: { default: "raised" },
     dense: { default: false },
     leftIcon: { default: "" },
-    rightIcon: { default: "" }
+    rightIcon: { default: "" },
+    disabled: { default: false }
   },
   computed: {
     buttonClass: function() {

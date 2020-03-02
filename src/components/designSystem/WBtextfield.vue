@@ -2,17 +2,23 @@
   <div class="text-field-container" :id="id" :data-wbid="'textfield' + _uid">
     <!--Filled-->
     <div
-      :class="'mdc-text-field' + shapedClass + leftIconClass + rightIconClass"
+      :class="'mdc-text-field' + shapedClass + leftIconClass + rightIconClass + disabledClass"
       v-if="variant == 'filled'"
     >
       <i class="material-icons mdc-text-field__icon" v-if="leftIcon">{{leftIcon}}</i>
       <input
-        type="text"
+        :type="type"
         :id="'textfield-' +  _uid"
         class="mdc-text-field__input"
         :aria-controls="helperId"
         :aria-describedby="helperId"
-        :maxlength="counter"
+        :maxlength="maxlength"
+        :required="required? true : false"
+        :disabled="disabled"
+        :pattern="pattern? pattern: false"
+        :title="title? title: false"
+        v-bind:value="value"
+        v-on="inputListeners"
       />
       <label class="mdc-floating-label" :for="'textfield-' +  _uid" v-if="label">{{label}}</label>
       <i class="material-icons mdc-text-field__icon" v-if="rightIcon">{{rightIcon}}</i>
@@ -21,17 +27,23 @@
 
     <!--Outlined-->
     <div
-      :class="'mdc-text-field mdc-text-field--outlined' + shapedClass + leftIconClass + rightIconClass"
+      :class="'mdc-text-field mdc-text-field--outlined' + shapedClass + leftIconClass + rightIconClass + disabledClass"
       v-if="variant == 'outlined'"
     >
       <i class="material-icons mdc-text-field__icon" v-if="leftIcon">{{leftIcon}}</i>
       <input
-        type="text"
+        :type="type"
         :id="'textfield-' +  _uid"
         class="mdc-text-field__input"
         :aria-controls="helperId"
         :aria-describedby="helperId"
-        :maxlength="counter"
+        :maxlength="maxlength"
+        :required="required? true : false"
+        :disabled="disabled"
+        :pattern="pattern? pattern: false"
+        :title="title? title: false"
+        v-bind:value="value"
+        v-on="inputListeners"
       />
       <i class="material-icons mdc-text-field__icon" v-if="rightIcon">{{rightIcon}}</i>
       <div class="mdc-notched-outline">
@@ -44,28 +56,33 @@
     </div>
 
     <!--Full-Width-->
-    <div class="mdc-text-field mdc-text-field--fullwidth" v-if="variant == 'full-width'">
+    <div :class="'mdc-text-field mdc-text-field--fullwidth' + disabledClass" v-if="variant == 'full-width'">
       <input
-        type="text"
+        :type="type"
         :id="'textfield-' +  _uid"
         class="mdc-text-field__input"
         :placeholder="label"
         :aria-label="label"
         :aria-controls="helperId"
         :aria-describedby="helperId"
-        :maxlength="counter"
+        :maxlength="maxlength"
+        :required="required? true : false"
+        :disabled="disabled"
+        :pattern="pattern? pattern: false"
+        :title="title? title: false"
+        v-bind:value="value"
+        v-on="inputListeners"
       />
     </div>
 
     <!--HelperLine-->
-    <div class="mdc-text-field-helper-line" v-if="helperId || counter">
-      <div
-        class="mdc-text-field-helper-text"
+    <div class="mdc-text-field-helper-line" v-if="helperId || maxlength">
+      <p
+        class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg"
         :id="helperId"
-        aria-hidden="true"
         v-if="helperText"
-      >{{helperText}}</div>
-      <div class="mdc-text-field-character-counter" v-if="counter">0 / 1</div>
+      >{{helperText}}</p>
+      <div class="mdc-text-field-character-counter" v-if="maxlength">0 / 1</div>
     </div>
   </div>
 </template>
@@ -76,13 +93,20 @@ import { Builder } from "_PagesSrc/ts/designSystem/Builder";
 export default {
   props: {
     id: {default: null},
+    value: { default: null },
     variant: { default: "filled" },
     label: { default: "Textfield Label" },
     shaped: { default: false },
     leftIcon: { default: "" },
     rightIcon: { default: "" },
     helperText: { default: "" },
-    counter: { default: "" }
+    type: { default: "text" },
+    required: { default: null },
+    disabled: { default: false },
+    pattern: { default: null },
+    title: { default: null },
+    maxlength: { default: null },
+    minlength: { default: null }
   },
   computed: {
     shapedClass: function() {
@@ -94,20 +118,47 @@ export default {
     rightIconClass: function() {
       return this.rightIcon ? " mdc-text-right-icon" : "";
     },
+    disabledClass: function() {
+      return this.disabled ? " mdc-text-field--disabled" : "";
+    },
     helperId: function() {
       return this.helperText ? "helpertext-" + this._uid : "";
+    },
+    inputListeners: function () {
+      var vm = this;
+      return Object.assign({},
+        this.$listeners, {
+          input: function (event) { // make work with v-model
+            vm.$emit('input', event.target.value);
+          }
+        }
+      );
     }
   },
   data: function() {
     return {
-      element: null
+      element: null,
+      elemResolved: null
     };
+  },
+  watch: {
+    value: function(value) {
+      if (this.elemResolved && this.elemResolved.mdc) {
+        this.elemResolved.mdc.value = value;
+      }
+    }
   },
   mounted() {
     this.element = Builder.getInstance().init(
       "WBtextfield",
       "textfield" + this._uid
     );
+    this.element.then((elem) => {
+      this.elemResolved = elem;
+      if (this.minlength) {
+        elem.mdc.minLength = this.minlength;
+      }
+    });
   }
 };
 </script>

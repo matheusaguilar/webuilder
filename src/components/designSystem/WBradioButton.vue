@@ -6,7 +6,9 @@
         type="radio"
         :id="'radio-' + _uid"
         name="radios"
-        checked
+        :value="val"
+        v-bind:checked="isChecked"
+        v-on="inputListeners"
       />
       <div class="mdc-radio__background">
         <div class="mdc-radio__outer-circle"></div>
@@ -23,12 +25,29 @@ import { Builder } from "_PagesSrc/ts/designSystem/Builder";
 export default {
   props: {
     id: null,
+    value: { default: null },
+    val: { default: null },
     label: { default: "Radio Label" }
   },
   data: function() {
     return {
       element: null
     };
+  },
+  computed: {
+    isChecked: function() {
+      return this.value === this.val;
+    },
+    inputListeners: function () {
+      var vm = this;
+      return Object.assign({},
+        this.$listeners, {
+          input: function (event) { // make work with v-model
+            vm.$emit('input', vm.val);
+          }
+        }
+      );
+    }
   },
   mounted() {
     this.element = Builder.getInstance().init("WBradioButton", "radiobutton" + this._uid);

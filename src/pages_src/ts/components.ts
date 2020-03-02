@@ -16,6 +16,7 @@ import WBmodal from '_Components/wrapper/WBmodal.vue';
 import WBcheckbox from '_Components/wrapper/WBcheckbox.vue';
 import WBradioButton from '_Components/wrapper/WBradioButton.vue';
 import WBtextfield from '_Components/wrapper/WBtextfield.vue';
+import WBtextarea from '_Components/wrapper/WBtextarea.vue';
 import WBselect from '_Components/wrapper/WBselect.vue';
 import WBlist from '_Components/wrapper/WBlist.vue';
 import WBlistItem from '_Components/wrapper/WBlistItem.vue';
@@ -39,6 +40,7 @@ const componentArray = [
   WBcheckbox,
   WBradioButton,
   WBtextfield,
+  WBtextarea,
   WBselect,
   WBlist,
   WBlistItem
