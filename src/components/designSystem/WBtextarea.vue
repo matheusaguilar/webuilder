@@ -1,6 +1,7 @@
 <template>
-  <div class="text-field-container" :id="id" :data-wbid="'textarea' + _uid">
-    <label class="mdc-text-field mdc-text-field--textarea">
+  <div class="text-field-container" :id="id">
+    <div :data-wbid="'textarea' + _uid" class="mdc-text-field mdc-text-field--textarea">
+      <div class="mdc-text-field-character-counter" v-if="maxlength">0 / {{maxlength}}</div>
       <textarea :id="'textarea-' +  _uid" class="mdc-text-field__input"
         :aria-labelledby="'textarea-label' + _uid" rows="8" cols="40"
         :maxlength="maxlength"
@@ -17,7 +18,7 @@
         </div>
         <div class="mdc-notched-outline__trailing"></div>
       </div>
-    </label>
+    </div>
   </div>
 </template>
 
@@ -72,18 +73,6 @@ export default {
         }
       );
     }
-  },
-  mounted() {
-    this.element = Builder.getInstance().init(
-      "WBtextfield",
-      "textfield" + this._uid
-    );
-    this.element.then((elem) => {
-      this.elemResolved = elem;
-      if (this.minlength) {
-        elem.mdc.minLength = this.minlength;
-      }
-    });
   }
 }
 </script>
