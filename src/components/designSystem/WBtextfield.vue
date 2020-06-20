@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+import { Builder } from "@src/ts/designSystem/Builder";
 
 export default {
   props: {
@@ -138,13 +138,12 @@ export default {
   data: function() {
     return {
       element: null,
-      elemResolved: null
     };
   },
   watch: {
     value: function(value) {
-      if (this.elemResolved && this.elemResolved.mdc) {
-        this.elemResolved.mdc.value = value;
+      if (this.element && this.element.mdc) {
+        this.element.mdc.value = value;
       }
     }
   },
@@ -153,12 +152,9 @@ export default {
       "WBtextfield",
       "textfield" + this._uid
     );
-    this.element.then((elem) => {
-      this.elemResolved = elem;
-      if (this.minlength) {
-        elem.mdc.minLength = this.minlength;
-      }
-    });
+    if (this.minlength) {
+      this.element.mdc.minlength = this.minlength;
+    }
   }
 };
 </script>

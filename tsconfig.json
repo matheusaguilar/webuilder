@@ -18,16 +18,16 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true, // disable this on production
     "paths": {
-      "_Components/*": [
+      "@components/*": [
         "src/components/*"
       ],
-      "_Assets/*": [
+      "@assets/*": [
         "dist/assets/*"
       ],
-      "_PagesSrc/*": [
+      "@src/*": [
         "src/pages_src/*"
       ],
-      "_Tests/*": [
+      "@tests/*": [
         "src/test/*"
       ]
     }

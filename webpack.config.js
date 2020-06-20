@@ -51,10 +51,10 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.vue', '.json'],
       alias: {
-        _Components: path.resolve(__dirname, 'src/components'),
-        _Assets: path.resolve(__dirname, 'dist/assets'),
-        _PagesSrc: path.resolve(__dirname, 'src/pages_src'),
-        _Tests: path.resolve(__dirname, 'src/test')
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@assets': path.resolve(__dirname, 'dist/assets'),
+        '@src': path.resolve(__dirname, 'src/pages_src'),
+        '@tests': path.resolve(__dirname, 'src/test')
       }
     },
     module: {

@@ -7,12 +7,12 @@
     "build": "webpack --mode=production",
     "start": "webpack-dev-server --mode=development"
   },
-  "author": "Aguilar",
+  "author": "Matheus Catarino de Aguilar",
   "license": "ISC",
   "dependencies": {
     "css-loader": "^2.1.0",
     "material-components-web": "^3.1.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.14.1",
     "reflect-metadata": "^0.1.13",
     "sass-loader": "^7.1.0",
     "ts-loader": "^6.1.0",
@@ -26,6 +26,6 @@
     "vue-template-compiler": "^2.6.6",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.11.0"
   }
 }

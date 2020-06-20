@@ -11,10 +11,10 @@
         <h2 class="mdc-dialog__title">{{title}}</h2>
         <div class="mdc-dialog__content">{{text}}</div>
         <footer class="mdc-dialog__actions">
-          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no" @click="noAction">
             <span class="mdc-button__label">{{labelNo}}</span>
           </button>
-          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes" @click="yesAction">
             <span class="mdc-button__label">{{labelYes}}</span>
           </button>
         </footer>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+import { Builder } from "@src/ts/designSystem/Builder";
 
 export default {
   props: {
@@ -39,6 +39,14 @@ export default {
     return {
       element: null
     };
+  },
+  methods: {
+    noAction: function() {
+      this.$emit('no');
+    },
+    yesAction: function() {
+      this.$emit('yes');
+    }
   },
   mounted() {
     this.element = Builder.getInstance().init("WBmodal", "modal" + this._uid);

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { Builder } from "_PagesSrc/ts/designSystem/Builder";
+import { Builder } from "@src/ts/designSystem/Builder";
 
 export default {
   props: {

@@ -128,8 +128,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { MDCTopAppBar } from '@material/top-app-bar';
 import { MDCDrawer } from '@material/drawer';
 import { MDCDialog } from '@material/dialog';
-import CompTree from '_Components/wbuilder/compTree.vue';
-import CompProps from '_Components/wbuilder/compProps.vue';
+import CompTree from '@components/wbuilder/compTree.vue';
+import CompProps from '@components/wbuilder/compProps.vue';
 
 import {
   ComponentRegister,
