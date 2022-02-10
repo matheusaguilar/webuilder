@@ -12,7 +12,7 @@
   "dependencies": {
     "css-loader": "^2.1.0",
     "material-components-web": "^3.1.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "reflect-metadata": "^0.1.13",
     "sass-loader": "^7.1.0",
     "ts-loader": "^6.1.0",
